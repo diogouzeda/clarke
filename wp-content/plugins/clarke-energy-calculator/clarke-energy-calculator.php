@@ -65,7 +65,7 @@ class Clarke_Energy_Calculator {
      */
     private function init_hooks() {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_shortcode('clarke_calculator', array($this, 'render_calculator'));
+        add_shortcode('estrategia_energia', array($this, 'render_calculator'));
         
         // Initialize AJAX handler
         new Clarke_Calculator_Ajax();
@@ -77,7 +77,7 @@ class Clarke_Energy_Calculator {
     public function enqueue_scripts() {
         // Only load on pages with the shortcode
         global $post;
-        if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'clarke_calculator')) {
+        if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'estrategia_energia')) {
             
             // Styles
             wp_enqueue_style(
