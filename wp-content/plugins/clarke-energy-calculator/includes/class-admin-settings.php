@@ -78,9 +78,9 @@ class Clarke_Admin_Settings {
      * Register settings
      */
     public function register_settings() {
-        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_API_KEY);
+        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_ENDPOINT_URL);
+        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_API_SECRET);
         register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_ENABLED);
-        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_FIELD_MAPPING);
     }
 
     /**
@@ -215,7 +215,7 @@ class Clarke_Admin_Settings {
                 <h3>Status da Integração HubSpot</h3>
                 <?php
                 $hubspot_enabled = Clarke_HubSpot_Integration::is_enabled();
-                $api_key = Clarke_HubSpot_Integration::get_api_key();
+                $endpoint_url = Clarke_HubSpot_Integration::get_endpoint_url();
                 ?>
                 <p>
                     <strong>Status:</strong> 
@@ -226,8 +226,8 @@ class Clarke_Admin_Settings {
                     <?php endif; ?>
                 </p>
                 <p>
-                    <strong>API Key:</strong> 
-                    <?php echo !empty($api_key) ? '••••••••' . substr($api_key, -4) : '<span class="clarke-badge danger">Não configurada</span>'; ?>
+                    <strong>Endpoint:</strong> 
+                    <?php echo !empty($endpoint_url) ? '<span class="clarke-badge success">Configurado</span>' : '<span class="clarke-badge danger">Não configurado</span>'; ?>
                 </p>
                 <p><a href="<?php echo admin_url('admin.php?page=clarke-calculator-hubspot'); ?>" class="button">Configurar HubSpot</a></p>
             </div>
