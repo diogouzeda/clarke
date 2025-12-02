@@ -24,7 +24,7 @@
 /* Container */
 .clarke-calculator {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-    max-width: 720px !important;
+    max-width: 1000px !important;
     margin: 0 auto !important;
     padding: 32px !important;
     background: var(--clarke-white) !important;
