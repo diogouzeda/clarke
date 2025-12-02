@@ -462,3 +462,40 @@
         width: 100%;
     }
 }
+
+/* Property Mapping Table */
+.clarke-mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.clarke-mapping-table thead th {
+    text-align: left;
+    padding: 12px 10px;
+    background: var(--clarke-light);
+    border-bottom: 2px solid var(--clarke-border);
+    font-weight: 600;
+    color: var(--clarke-dark);
+}
+
+.clarke-mapping-table tbody td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--clarke-border);
+    vertical-align: top;
+}
+
+.clarke-mapping-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.clarke-mapping-table select {
+    width: 100%;
+    max-width: 300px;
+}
+
+.clarke-mapping-table code {
+    background: #f0f0f0;
+    padding: 2px 5px;
+    border-radius: 3px;
+}

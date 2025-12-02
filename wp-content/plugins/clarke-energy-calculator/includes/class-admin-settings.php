@@ -505,21 +505,42 @@ class Clarke_Admin_Settings {
     public function render_hubspot_page() {
         $this->render_page_header('Configurações HubSpot');
         
-        // Handle form submission
+        // Handle form submission - Connection settings
         if (isset($_POST['clarke_hubspot_submit']) && check_admin_referer('clarke_hubspot_settings')) {
             $access_token = sanitize_text_field($_POST['hubspot_access_token']);
             $enabled = isset($_POST['hubspot_enabled']) ? true : false;
             
             Clarke_HubSpot_Integration::save_settings($access_token, $enabled);
             
-            echo '<div class="notice notice-success"><p>Configurações salvas com sucesso!</p></div>';
+            // Clear properties cache when token changes
+            Clarke_HubSpot_Integration::clear_properties_cache();
+            
+            echo '<div class="notice notice-success"><p>Configurações de conexão salvas com sucesso!</p></div>';
+        }
+        
+        // Handle form submission - Property mapping
+        if (isset($_POST['clarke_hubspot_mapping_submit']) && check_admin_referer('clarke_hubspot_mapping')) {
+            $mapping = array();
+            $calculator_fields = Clarke_HubSpot_Integration::get_calculator_fields();
+            
+            foreach (array_keys($calculator_fields) as $field) {
+                $mapping[$field] = isset($_POST['mapping_' . $field]) ? sanitize_text_field($_POST['mapping_' . $field]) : '';
+            }
+            
+            Clarke_HubSpot_Integration::save_property_mapping($mapping);
+            
+            echo '<div class="notice notice-success"><p>Mapeamento de propriedades salvo com sucesso!</p></div>';
         }
         
         $access_token = Clarke_HubSpot_Integration::get_access_token();
         $enabled = get_option('clarke_hubspot_enabled', false);
+        $hubspot_properties = Clarke_HubSpot_Integration::get_hubspot_properties();
+        $current_mapping = Clarke_HubSpot_Integration::get_property_mapping();
+        $calculator_fields = Clarke_HubSpot_Integration::get_calculator_fields();
         
         ?>
         <div class="clarke-admin-content">
+            <!-- Connection Settings -->
             <form method="post" action="">
                 <?php wp_nonce_field('clarke_hubspot_settings'); ?>
                 
@@ -538,7 +559,7 @@ class Clarke_Admin_Settings {
                                 <span id="clarke-connection-status"></span>
                                 <p class="description">
                                     Token de acesso do Private App do HubSpot.<br>
-                                    Encontre em: <strong>HubSpot → Configurações → Integrações → Private Apps</strong>
+                                    Encontre em: <strong>HubSpot → Desenvolvimento → Projetos → calculadoras → Distribuição</strong>
                                 </p>
                             </td>
                         </tr>
@@ -552,25 +573,130 @@ class Clarke_Admin_Settings {
                             </td>
                         </tr>
                     </table>
+                    
+                    <p class="submit">
+                        <input type="submit" name="clarke_hubspot_submit" class="button button-primary" value="Salvar Configurações">
+                    </p>
                 </div>
+            </form>
+            
+            <!-- Property Mapping -->
+            <?php if (!empty($access_token)): ?>
+            <form method="post" action="">
+                <?php wp_nonce_field('clarke_hubspot_mapping'); ?>
                 
                 <div class="clarke-admin-card">
-                    <h3>Onde encontrar o Token de Acesso</h3>
-                    <p>O Token de Acesso está disponível na página do seu projeto HubSpot:</p>
-                    <ol>
-                        <li>Acesse <strong>Desenvolvimento → Projetos → calculadoras</strong></li>
-                        <li>Clique no App <strong>Clarke Calculadora de Energia</strong></li>
-                        <li>Vá na aba <strong>Distribuição</strong></li>
-                        <li>Copie o <strong>Token de Acesso</strong> (pat-na1-...)</li>
-                        <li>Cole no campo acima e salve</li>
-                    </ol>
-                    <p><strong>Importante:</strong> O Token precisa ter os escopos: <code>crm.objects.contacts.read</code> e <code>crm.objects.contacts.write</code></p>
+                    <h3>
+                        Mapeamento de Propriedades
+                        <button type="button" id="clarke-refresh-properties" class="button button-small" style="margin-left: 10px;">
+                            <span class="dashicons dashicons-update" style="vertical-align: middle;"></span> Atualizar Propriedades
+                        </button>
+                    </h3>
+                    <p class="description">Defina para qual propriedade do HubSpot cada campo da calculadora deve ser enviado.</p>
+                    
+                    <?php if (empty($hubspot_properties)): ?>
+                        <p class="notice notice-warning" style="padding: 10px;">
+                            <strong>Não foi possível carregar as propriedades do HubSpot.</strong><br>
+                            Verifique se o Token de Acesso está correto e tem as permissões necessárias.
+                        </p>
+                    <?php else: ?>
+                        <table class="form-table clarke-mapping-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">Campo da Calculadora</th>
+                                    <th style="width: 40%;">Propriedade do HubSpot</th>
+                                    <th style="width: 30%;">Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($calculator_fields as $field_key => $field_label): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?php echo esc_html($field_label); ?></strong>
+                                        <code style="display: block; font-size: 11px; color: #666;"><?php echo esc_html($field_key); ?></code>
+                                    </td>
+                                    <td>
+                                        <?php if ($field_key === 'email'): ?>
+                                            <input type="text" value="email (obrigatório)" disabled class="regular-text" style="background: #f0f0f0;">
+                                            <input type="hidden" name="mapping_email" value="email">
+                                        <?php else: ?>
+                                            <select name="mapping_<?php echo esc_attr($field_key); ?>" class="regular-text">
+                                                <option value="">-- Não mapear --</option>
+                                                <?php 
+                                                $groups = array();
+                                                foreach ($hubspot_properties as $prop) {
+                                                    $groups[$prop['groupName']][] = $prop;
+                                                }
+                                                ksort($groups);
+                                                
+                                                foreach ($groups as $group_name => $props): 
+                                                    $group_label = $group_name ?: 'Outros';
+                                                ?>
+                                                    <optgroup label="<?php echo esc_attr($group_label); ?>">
+                                                        <?php foreach ($props as $prop): ?>
+                                                            <option value="<?php echo esc_attr($prop['name']); ?>" <?php selected($current_mapping[$field_key] ?? '', $prop['name']); ?>>
+                                                                <?php echo esc_html($prop['label']); ?> (<?php echo esc_html($prop['name']); ?>)
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </optgroup>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $descriptions = array(
+                                            'email' => 'Email do lead (obrigatório)',
+                                            'company_type' => 'Tipo de empresa selecionado',
+                                            'company_size' => 'Porte da empresa',
+                                            'monthly_expense' => 'Gasto mensal com energia',
+                                            'recommended_strategy' => 'Estratégia recomendada pela calculadora',
+                                            'scores' => 'Pontuações calculadas',
+                                            'all_answers' => 'Todas as respostas do formulário',
+                                            'utm_source' => 'Origem do tráfego',
+                                            'utm_medium' => 'Meio de marketing',
+                                            'utm_campaign' => 'Nome da campanha',
+                                            'utm_term' => 'Termo de busca',
+                                            'utm_content' => 'Conteúdo do anúncio',
+                                        );
+                                        echo esc_html($descriptions[$field_key] ?? '');
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        
+                        <p class="description" style="margin-top: 15px;">
+                            <strong>Dica:</strong> Você pode criar propriedades personalizadas no HubSpot para armazenar dados específicos da calculadora. 
+                            Vá em <strong>Configurações → Propriedades → Criar Propriedade</strong>.
+                        </p>
+                    <?php endif; ?>
+                    
+                    <p class="submit">
+                        <input type="submit" name="clarke_hubspot_mapping_submit" class="button button-primary" value="Salvar Mapeamento">
+                    </p>
                 </div>
-                
-                <p class="submit">
-                    <input type="submit" name="clarke_hubspot_submit" class="button button-primary" value="Salvar Configurações">
-                </p>
             </form>
+            <?php else: ?>
+                <div class="clarke-admin-card">
+                    <h3>Mapeamento de Propriedades</h3>
+                    <p class="notice notice-info" style="padding: 10px;">
+                        Configure o Token de Acesso acima para ver as opções de mapeamento de propriedades.
+                    </p>
+                </div>
+            <?php endif; ?>
+            
+            <div class="clarke-admin-card">
+                <h3>Instruções</h3>
+                <ol>
+                    <li>Copie o <strong>Token de Acesso</strong> da aba Distribuição do seu App no HubSpot</li>
+                    <li>Cole no campo acima e clique em <strong>Testar Conexão</strong></li>
+                    <li>Marque <strong>Ativar Integração</strong> e salve</li>
+                    <li>Configure o <strong>Mapeamento de Propriedades</strong> para definir onde cada campo será salvo no HubSpot</li>
+                </ol>
+                <p><strong>Importante:</strong> O Token precisa ter os escopos: <code>crm.objects.contacts.read</code> e <code>crm.objects.contacts.write</code></p>
+            </div>
         </div>
         <?php
         $this->render_page_footer();
@@ -777,7 +903,7 @@ class Clarke_Admin_Settings {
     }
 
     /**
-     * AJAX: Refresh HubSpot properties (não utilizado na nova integração via App)
+     * AJAX: Refresh HubSpot properties
      */
     public function ajax_refresh_properties() {
         check_ajax_referer('clarke_admin_nonce', 'nonce');
@@ -786,9 +912,19 @@ class Clarke_Admin_Settings {
             wp_send_json_error(array('message' => 'Sem permissão'));
         }
 
-        // Na nova integração via HubSpot App, não é necessário carregar propriedades
+        // Clear cache and reload properties
+        Clarke_HubSpot_Integration::clear_properties_cache();
+        $properties = Clarke_HubSpot_Integration::get_hubspot_properties();
+
+        if (empty($properties)) {
+            wp_send_json_error(array(
+                'message' => 'Não foi possível carregar as propriedades. Verifique o Token de Acesso.',
+            ));
+        }
+
         wp_send_json_success(array(
-            'message' => 'Integração via HubSpot App não requer mapeamento de propriedades',
+            'message' => count($properties) . ' propriedades carregadas com sucesso!',
+            'count' => count($properties),
         ));
     }
 }

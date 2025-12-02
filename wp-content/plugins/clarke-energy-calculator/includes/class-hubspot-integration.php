@@ -15,11 +15,137 @@ class Clarke_HubSpot_Integration {
      */
     const OPTION_ACCESS_TOKEN = 'clarke_hubspot_access_token';
     const OPTION_ENABLED = 'clarke_hubspot_enabled';
+    const OPTION_PROPERTY_MAPPING = 'clarke_hubspot_property_mapping';
 
     /**
      * HubSpot API Base URL
      */
     const API_BASE_URL = 'https://api.hubapi.com';
+
+    /**
+     * Calculator fields available for mapping
+     */
+    public static function get_calculator_fields() {
+        return array(
+            'email' => 'Email',
+            'company_type' => 'Tipo de Empresa',
+            'company_size' => 'Porte da Empresa',
+            'monthly_expense' => 'Gasto Mensal (R$)',
+            'recommended_strategy' => 'Estratégia Recomendada',
+            'scores' => 'Scores (JSON)',
+            'all_answers' => 'Todas as Respostas (JSON)',
+            'utm_source' => 'UTM Source',
+            'utm_medium' => 'UTM Medium',
+            'utm_campaign' => 'UTM Campaign',
+            'utm_term' => 'UTM Term',
+            'utm_content' => 'UTM Content',
+        );
+    }
+
+    /**
+     * Default property mapping
+     */
+    public static function get_default_mapping() {
+        return array(
+            'email' => 'email',
+            'company_type' => '',
+            'company_size' => '',
+            'monthly_expense' => '',
+            'recommended_strategy' => '',
+            'scores' => '',
+            'all_answers' => '',
+            'utm_source' => 'hs_analytics_source',
+            'utm_medium' => '',
+            'utm_campaign' => '',
+            'utm_term' => '',
+            'utm_content' => '',
+        );
+    }
+
+    /**
+     * Get property mapping
+     */
+    public static function get_property_mapping() {
+        $mapping = get_option(self::OPTION_PROPERTY_MAPPING, array());
+        return wp_parse_args($mapping, self::get_default_mapping());
+    }
+
+    /**
+     * Save property mapping
+     */
+    public static function save_property_mapping($mapping) {
+        update_option(self::OPTION_PROPERTY_MAPPING, $mapping);
+    }
+
+    /**
+     * Get HubSpot contact properties
+     */
+    public static function get_hubspot_properties($access_token = null) {
+        if ($access_token === null) {
+            $access_token = self::get_access_token();
+        }
+
+        if (empty($access_token)) {
+            return array();
+        }
+
+        // Check cache first
+        $cached = get_transient('clarke_hubspot_properties');
+        if ($cached !== false) {
+            return $cached;
+        }
+
+        $response = wp_remote_get(self::API_BASE_URL . '/crm/v3/properties/contacts', array(
+            'headers' => array(
+                'Authorization' => 'Bearer ' . $access_token,
+                'Content-Type' => 'application/json',
+            ),
+            'timeout' => 15,
+        ));
+
+        if (is_wp_error($response)) {
+            return array();
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        if ($code !== 200) {
+            return array();
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        $properties = array();
+
+        if (isset($body['results']) && is_array($body['results'])) {
+            foreach ($body['results'] as $prop) {
+                // Only include writable properties
+                if (!isset($prop['modificationMetadata']['readOnlyValue']) || !$prop['modificationMetadata']['readOnlyValue']) {
+                    $properties[$prop['name']] = array(
+                        'name' => $prop['name'],
+                        'label' => $prop['label'],
+                        'type' => $prop['type'],
+                        'groupName' => isset($prop['groupName']) ? $prop['groupName'] : '',
+                    );
+                }
+            }
+        }
+
+        // Sort by label
+        uasort($properties, function($a, $b) {
+            return strcmp($a['label'], $b['label']);
+        });
+
+        // Cache for 1 hour
+        set_transient('clarke_hubspot_properties', $properties, HOUR_IN_SECONDS);
+
+        return $properties;
+    }
+
+    /**
+     * Clear properties cache
+     */
+    public static function clear_properties_cache() {
+        delete_transient('clarke_hubspot_properties');
+    }
 
     /**
      * Get Access Token
@@ -203,63 +329,46 @@ class Clarke_HubSpot_Integration {
             );
         }
 
-        // Prepare properties
+        // Get property mapping
+        $mapping = self::get_property_mapping();
+
+        // Prepare properties based on mapping
         $properties = array(
             'email' => $lead_data['email'],
         );
 
-        // Map calculator fields to HubSpot properties
-        // Campos padrão do HubSpot
-        if (!empty($lead_data['firstname'])) {
-            $properties['firstname'] = $lead_data['firstname'];
-        }
-        if (!empty($lead_data['lastname'])) {
-            $properties['lastname'] = $lead_data['lastname'];
-        }
-        if (!empty($lead_data['phone'])) {
-            $properties['phone'] = $lead_data['phone'];
-        }
-        if (!empty($lead_data['company'])) {
-            $properties['company'] = $lead_data['company'];
-        }
-
-        // Campos personalizados da calculadora (você pode criar esses campos no HubSpot)
-        // Por enquanto, vamos salvar tudo no campo "message" ou criar campos customizados
-        $calculator_info = array();
-        
-        if (!empty($lead_data['company_type'])) {
-            $calculator_info[] = 'Tipo de Empresa: ' . $lead_data['company_type'];
-        }
-        if (!empty($lead_data['company_size'])) {
-            $calculator_info[] = 'Porte: ' . $lead_data['company_size'];
-        }
-        if (!empty($lead_data['monthly_expense'])) {
-            $calculator_info[] = 'Gasto Mensal: R$ ' . number_format((float)$lead_data['monthly_expense'], 2, ',', '.');
-        }
-        if (!empty($lead_data['recommended_strategy'])) {
-            $calculator_info[] = 'Estratégia Recomendada: ' . $lead_data['recommended_strategy'];
-        }
-        if (!empty($lead_data['scores'])) {
-            $scores = is_string($lead_data['scores']) ? json_decode($lead_data['scores'], true) : $lead_data['scores'];
-            if (is_array($scores)) {
-                $calculator_info[] = 'Scores: ' . implode(', ', array_map(function($k, $v) {
-                    return "$k: $v";
-                }, array_keys($scores), $scores));
+        // Apply mapping for each calculator field
+        foreach ($mapping as $calc_field => $hubspot_property) {
+            if (empty($hubspot_property) || $calc_field === 'email') {
+                continue;
             }
+
+            $value = isset($lead_data[$calc_field]) ? $lead_data[$calc_field] : '';
+            
+            if (empty($value)) {
+                continue;
+            }
+
+            // Handle special formatting
+            if ($calc_field === 'scores' || $calc_field === 'all_answers') {
+                // JSON fields - convert to readable string if it's an array
+                if (is_string($value)) {
+                    $decoded = json_decode($value, true);
+                    if (is_array($decoded)) {
+                        $value = self::format_array_for_hubspot($decoded);
+                    }
+                } elseif (is_array($value)) {
+                    $value = self::format_array_for_hubspot($value);
+                }
+            } elseif ($calc_field === 'monthly_expense') {
+                // Format as currency
+                $value = 'R$ ' . number_format((float)$value, 2, ',', '.');
+            }
+
+            $properties[$hubspot_property] = $value;
         }
 
-        if (!empty($calculator_info)) {
-            // Usar o campo message para armazenar info da calculadora
-            // Você pode criar campos customizados no HubSpot para dados mais estruturados
-            $properties['message'] = "Lead da Calculadora de Energia Clarke\n\n" . implode("\n", $calculator_info);
-        }
-
-        // UTM Parameters
-        if (!empty($lead_data['utm_source'])) {
-            $properties['hs_analytics_source'] = $lead_data['utm_source'];
-        }
-
-        // Lead source
+        // Set default HubSpot properties
         $properties['hs_lead_status'] = 'NEW';
         $properties['lifecyclestage'] = 'lead';
 
@@ -437,6 +546,25 @@ class Clarke_HubSpot_Integration {
         }
 
         return $result;
+    }
+
+    /**
+     * Format array data for HubSpot (convert to readable string)
+     */
+    private static function format_array_for_hubspot($data, $prefix = '') {
+        $lines = array();
+        
+        foreach ($data as $key => $value) {
+            $label = $prefix ? "$prefix.$key" : $key;
+            
+            if (is_array($value)) {
+                $lines[] = self::format_array_for_hubspot($value, $label);
+            } else {
+                $lines[] = "$label: $value";
+            }
+        }
+        
+        return implode("\n", $lines);
     }
 
     /**
