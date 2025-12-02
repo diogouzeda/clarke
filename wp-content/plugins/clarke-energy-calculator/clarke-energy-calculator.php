@@ -49,6 +49,48 @@ class Clarke_Energy_Calculator {
     private function __construct() {
         $this->includes();
         $this->init_hooks();
+        $this->maybe_upgrade_database();
+    }
+
+    /**
+     * Check and upgrade database if needed
+     */
+    private function maybe_upgrade_database() {
+        $db_version = get_option('clarke_calc_db_version', '1.0.0');
+        
+        // If version is less than 1.1.0, run upgrade
+        if (version_compare($db_version, '1.1.0', '<')) {
+            $this->upgrade_database();
+            update_option('clarke_calc_db_version', '1.1.0');
+        }
+    }
+
+    /**
+     * Upgrade database schema
+     */
+    private function upgrade_database() {
+        global $wpdb;
+        
+        $leads_table = $wpdb->prefix . 'clarke_calculator_leads';
+        
+        // Check existing columns
+        $existing_columns = $wpdb->get_col("DESCRIBE $leads_table", 0);
+        
+        if (!$existing_columns) {
+            return; // Table doesn't exist yet
+        }
+        
+        $new_columns = array(
+            'lead_source' => "ALTER TABLE $leads_table ADD COLUMN lead_source text DEFAULT NULL AFTER hubspot_synced_at",
+            'page_url' => "ALTER TABLE $leads_table ADD COLUMN page_url text DEFAULT NULL AFTER lead_source",
+            'page_title' => "ALTER TABLE $leads_table ADD COLUMN page_title varchar(255) DEFAULT NULL AFTER page_url",
+        );
+        
+        foreach ($new_columns as $column => $sql) {
+            if (!in_array($column, $existing_columns)) {
+                $wpdb->query($sql);
+            }
+        }
     }
 
     /**
