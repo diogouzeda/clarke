@@ -74,6 +74,9 @@ class Clarke_Calculator_Ajax {
         $utm_term = isset($_POST['utm_term']) ? sanitize_text_field($_POST['utm_term']) : '';
         $utm_content = isset($_POST['utm_content']) ? sanitize_text_field($_POST['utm_content']) : '';
         $referrer = isset($_POST['referrer']) ? esc_url_raw($_POST['referrer']) : '';
+        $lead_source = isset($_POST['lead_source']) ? sanitize_text_field($_POST['lead_source']) : '';
+        $page_url = isset($_POST['page_url']) ? esc_url_raw($_POST['page_url']) : '';
+        $page_title = isset($_POST['page_title']) ? sanitize_text_field($_POST['page_title']) : '';
         
         // Get IP and User Agent
         $ip_address = $this->get_client_ip();
@@ -95,6 +98,9 @@ class Clarke_Calculator_Ajax {
             'recommended_strategy' => $recommended_strategy,
             'all_answers' => json_encode($answers),
             'scores' => json_encode($scores),
+            'lead_source' => $lead_source,
+            'page_url' => $page_url,
+            'page_title' => $page_title,
             'utm_source' => $utm_source,
             'utm_medium' => $utm_medium,
             'utm_campaign' => $utm_campaign,
@@ -109,7 +115,7 @@ class Clarke_Calculator_Ajax {
         $result = $wpdb->insert(
             $table_name,
             $lead_data,
-            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
+            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
         );
 
         if ($result === false) {

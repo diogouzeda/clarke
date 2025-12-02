@@ -32,7 +32,10 @@
                 utm_campaign: urlParams.get('utm_campaign') || '',
                 utm_term: urlParams.get('utm_term') || '',
                 utm_content: urlParams.get('utm_content') || '',
-                referrer: document.referrer || ''
+                referrer: document.referrer || '',
+                page_url: window.location.href || '',
+                page_title: document.title || '',
+                lead_source: this.getHubSpotSource()
             };
             
             // Try to get from localStorage if not in URL (for returning visitors)
@@ -42,7 +45,13 @@
                     const storedData = JSON.parse(stored);
                     // Use stored data only if it's less than 30 days old
                     if (storedData.timestamp && (Date.now() - storedData.timestamp) < 30 * 24 * 60 * 60 * 1000) {
-                        this.tracking = { ...storedData, referrer: document.referrer || storedData.referrer };
+                        this.tracking = { 
+                            ...storedData, 
+                            referrer: document.referrer || storedData.referrer,
+                            page_url: window.location.href,
+                            page_title: document.title,
+                            lead_source: this.getHubSpotSource() || storedData.lead_source
+                        };
                     }
                 }
             } else {
@@ -52,6 +61,95 @@
                     timestamp: Date.now()
                 }));
             }
+        },
+
+        // Get HubSpot tracking source from cookies
+        getHubSpotSource: function() {
+            // HubSpot stores tracking data in __hstc cookie
+            // Format: <hub_id>.<visitor_id>.<first_visit_timestamp>.<previous_visit_timestamp>.<current_visit_timestamp>.<session_count>
+            const hstc = this.getCookie('__hstc');
+            const hssc = this.getCookie('__hssc');
+            const hubspotutk = this.getCookie('hubspotutk');
+            
+            // Try to get the original source from __hssrc (source data)
+            let source = '';
+            
+            // Check for referrer-based source
+            const referrer = document.referrer;
+            if (referrer) {
+                try {
+                    const refUrl = new URL(referrer);
+                    const refHost = refUrl.hostname.toLowerCase();
+                    
+                    // Detect source from referrer
+                    if (refHost.includes('google')) {
+                        source = 'Google';
+                    } else if (refHost.includes('facebook') || refHost.includes('fb.com')) {
+                        source = 'Facebook';
+                    } else if (refHost.includes('instagram')) {
+                        source = 'Instagram';
+                    } else if (refHost.includes('linkedin')) {
+                        source = 'LinkedIn';
+                    } else if (refHost.includes('twitter') || refHost.includes('x.com')) {
+                        source = 'Twitter/X';
+                    } else if (refHost.includes('youtube')) {
+                        source = 'YouTube';
+                    } else if (refHost.includes('bing')) {
+                        source = 'Bing';
+                    } else if (refHost.includes('yahoo')) {
+                        source = 'Yahoo';
+                    } else if (!refHost.includes(window.location.hostname)) {
+                        source = refHost;
+                    }
+                } catch (e) {
+                    // Invalid URL, ignore
+                }
+            }
+            
+            // If we have UTM source, use that instead
+            const urlParams = new URLSearchParams(window.location.search);
+            const utmSource = urlParams.get('utm_source');
+            if (utmSource) {
+                source = utmSource;
+                
+                // Add medium if available
+                const utmMedium = urlParams.get('utm_medium');
+                if (utmMedium) {
+                    source += ' / ' + utmMedium;
+                }
+                
+                // Add campaign if available
+                const utmCampaign = urlParams.get('utm_campaign');
+                if (utmCampaign) {
+                    source += ' / ' + utmCampaign;
+                }
+            }
+            
+            // If no source detected, mark as direct or organic
+            if (!source) {
+                if (referrer && !referrer.includes(window.location.hostname)) {
+                    source = 'Referral: ' + referrer;
+                } else if (!referrer) {
+                    source = 'Acesso Direto';
+                } else {
+                    source = 'Navegação Interna';
+                }
+            }
+            
+            // Add page info
+            source += ' | Página: ' + (document.title || window.location.pathname);
+            
+            return source;
+        },
+
+        // Helper to get cookie value
+        getCookie: function(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+            return '';
         },
 
         // Bind event listeners
@@ -362,6 +460,9 @@
                     answers: this.answers,
                     scores: this.results.scores,
                     recommended_strategy: this.results.winner.key,
+                    lead_source: this.tracking.lead_source,
+                    page_url: this.tracking.page_url,
+                    page_title: this.tracking.page_title,
                     utm_source: this.tracking.utm_source,
                     utm_medium: this.tracking.utm_medium,
                     utm_campaign: this.tracking.utm_campaign,

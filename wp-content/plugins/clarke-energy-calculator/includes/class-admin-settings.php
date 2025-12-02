@@ -653,13 +653,17 @@ class Clarke_Admin_Settings {
                                             'recommended_strategy' => 'Estratégia recomendada pela calculadora',
                                             'scores' => 'Pontuações calculadas',
                                             'all_answers' => 'Todas as respostas do formulário',
-                                            'utm_source' => 'Origem do tráfego',
-                                            'utm_medium' => 'Meio de marketing',
-                                            'utm_campaign' => 'Nome da campanha',
-                                            'utm_term' => 'Termo de busca',
-                                            'utm_content' => 'Conteúdo do anúncio',
+                                            'lead_source' => 'Origem completa do lead (referrer + UTMs + página)',
+                                            'page_url' => 'URL da página onde preencheu o formulário',
+                                            'page_title' => 'Título da página do formulário',
+                                            'utm_source' => 'Parâmetro utm_source',
+                                            'utm_medium' => 'Parâmetro utm_medium',
+                                            'utm_campaign' => 'Parâmetro utm_campaign',
+                                            'utm_term' => 'Parâmetro utm_term',
+                                            'utm_content' => 'Parâmetro utm_content',
                                         );
                                         echo esc_html($descriptions[$field_key] ?? '');
+                                        ?>
                                         ?>
                                     </td>
                                 </tr>
