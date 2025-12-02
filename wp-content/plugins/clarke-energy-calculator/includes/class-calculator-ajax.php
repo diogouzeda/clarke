@@ -67,6 +67,18 @@ class Clarke_Calculator_Ajax {
         $scores = isset($_POST['scores']) ? $_POST['scores'] : array();
         $recommended_strategy = isset($_POST['recommended_strategy']) ? sanitize_text_field($_POST['recommended_strategy']) : '';
 
+        // Get UTM and tracking data
+        $utm_source = isset($_POST['utm_source']) ? sanitize_text_field($_POST['utm_source']) : '';
+        $utm_medium = isset($_POST['utm_medium']) ? sanitize_text_field($_POST['utm_medium']) : '';
+        $utm_campaign = isset($_POST['utm_campaign']) ? sanitize_text_field($_POST['utm_campaign']) : '';
+        $utm_term = isset($_POST['utm_term']) ? sanitize_text_field($_POST['utm_term']) : '';
+        $utm_content = isset($_POST['utm_content']) ? sanitize_text_field($_POST['utm_content']) : '';
+        $referrer = isset($_POST['referrer']) ? esc_url_raw($_POST['referrer']) : '';
+        
+        // Get IP and User Agent
+        $ip_address = $this->get_client_ip();
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field($_SERVER['HTTP_USER_AGENT']) : '';
+
         // Prepare data
         $company_type = isset($answers['company_type']) ? $answers['company_type'] : '';
         $company_size = isset($answers['company_size']) ? $answers['company_size'] : '';
@@ -75,29 +87,107 @@ class Clarke_Calculator_Ajax {
         // Insert into database
         $table_name = $wpdb->prefix . 'clarke_calculator_leads';
         
+        $lead_data = array(
+            'email' => $email,
+            'company_type' => $company_type,
+            'company_size' => $company_size,
+            'monthly_expense' => $monthly_expense,
+            'recommended_strategy' => $recommended_strategy,
+            'all_answers' => json_encode($answers),
+            'scores' => json_encode($scores),
+            'utm_source' => $utm_source,
+            'utm_medium' => $utm_medium,
+            'utm_campaign' => $utm_campaign,
+            'utm_term' => $utm_term,
+            'utm_content' => $utm_content,
+            'referrer' => $referrer,
+            'ip_address' => $ip_address,
+            'user_agent' => $user_agent,
+            'created_at' => current_time('mysql'),
+        );
+        
         $result = $wpdb->insert(
             $table_name,
-            array(
-                'email' => $email,
-                'company_type' => $company_type,
-                'company_size' => $company_size,
-                'monthly_expense' => $monthly_expense,
-                'recommended_strategy' => $recommended_strategy,
-                'all_answers' => json_encode($answers),
-                'scores' => json_encode($scores),
-                'created_at' => current_time('mysql'),
-            ),
-            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
+            $lead_data,
+            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
         );
 
         if ($result === false) {
+            // Log error
+            Clarke_Logger::log('lead_error', 'Erro ao salvar lead no banco de dados', array(
+                'request' => $lead_data,
+                'response' => array('error' => $wpdb->last_error)
+            ));
             wp_send_json_error(array('message' => 'Erro ao salvar dados. Tente novamente.'));
         }
 
-        // Optional: Send notification email
+        $lead_id = $wpdb->insert_id;
+
+        // Log form submission
+        Clarke_Logger::log('form_submit', 'Formulário enviado com sucesso', array(
+            'lead_id' => $lead_id,
+            'request' => $lead_data,
+            'utm_source' => $utm_source,
+            'utm_medium' => $utm_medium,
+            'utm_campaign' => $utm_campaign,
+            'utm_term' => $utm_term,
+            'utm_content' => $utm_content,
+            'referrer' => $referrer
+        ));
+
+        // Log lead creation
+        Clarke_Logger::log('lead_created', "Lead #{$lead_id} criado: {$email}", array(
+            'lead_id' => $lead_id
+        ));
+
+        // Sync with HubSpot
+        $hubspot_synced = false;
+        if (Clarke_HubSpot_Integration::is_enabled()) {
+            $lead_data['id'] = $lead_id;
+            $hubspot_result = Clarke_HubSpot_Integration::sync_contact($lead_data);
+            
+            if ($hubspot_result['success']) {
+                $hubspot_synced = true;
+                
+                // Update lead with HubSpot contact ID
+                $wpdb->update(
+                    $table_name,
+                    array(
+                        'hubspot_contact_id' => $hubspot_result['contact_id'],
+                        'hubspot_synced_at' => current_time('mysql'),
+                    ),
+                    array('id' => $lead_id),
+                    array('%s', '%s'),
+                    array('%d')
+                );
+            }
+        }
+
+        // Send notification email
         $this->send_notification_email($email, $answers, $recommended_strategy);
 
-        wp_send_json_success(array('message' => 'Lead salvo com sucesso!'));
+        wp_send_json_success(array(
+            'message' => 'Lead salvo com sucesso!',
+            'lead_id' => $lead_id,
+            'hubspot_synced' => $hubspot_synced,
+        ));
+    }
+
+    /**
+     * Get client IP address
+     */
+    private function get_client_ip() {
+        $ip = '';
+        
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        
+        return sanitize_text_field(trim($ip));
     }
 
     /**

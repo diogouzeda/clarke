@@ -12,12 +12,46 @@
         totalSteps: 15,
         answers: {},
         results: null,
+        tracking: {},
 
         // Initialize
         init: function() {
+            this.captureTracking();
             this.bindEvents();
             this.updateProgress();
             this.initRangeSlider();
+        },
+
+        // Capture UTM parameters and referrer
+        captureTracking: function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            this.tracking = {
+                utm_source: urlParams.get('utm_source') || '',
+                utm_medium: urlParams.get('utm_medium') || '',
+                utm_campaign: urlParams.get('utm_campaign') || '',
+                utm_term: urlParams.get('utm_term') || '',
+                utm_content: urlParams.get('utm_content') || '',
+                referrer: document.referrer || ''
+            };
+            
+            // Try to get from localStorage if not in URL (for returning visitors)
+            if (!this.tracking.utm_source) {
+                const stored = localStorage.getItem('clarke_tracking');
+                if (stored) {
+                    const storedData = JSON.parse(stored);
+                    // Use stored data only if it's less than 30 days old
+                    if (storedData.timestamp && (Date.now() - storedData.timestamp) < 30 * 24 * 60 * 60 * 1000) {
+                        this.tracking = { ...storedData, referrer: document.referrer || storedData.referrer };
+                    }
+                }
+            } else {
+                // Save to localStorage for future visits
+                localStorage.setItem('clarke_tracking', JSON.stringify({
+                    ...this.tracking,
+                    timestamp: Date.now()
+                }));
+            }
         },
 
         // Bind event listeners
@@ -299,7 +333,13 @@
                     email: email,
                     answers: this.answers,
                     scores: this.results.scores,
-                    recommended_strategy: this.results.winner.key
+                    recommended_strategy: this.results.winner.key,
+                    utm_source: this.tracking.utm_source,
+                    utm_medium: this.tracking.utm_medium,
+                    utm_campaign: this.tracking.utm_campaign,
+                    utm_term: this.tracking.utm_term,
+                    utm_content: this.tracking.utm_content,
+                    referrer: this.tracking.referrer
                 },
                 success: function() {
                     // Show results regardless of lead save status

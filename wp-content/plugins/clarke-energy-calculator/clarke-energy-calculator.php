@@ -58,6 +58,13 @@ class Clarke_Energy_Calculator {
         require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-calculator-logic.php';
         require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-calculator-ajax.php';
         require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-lead-manager.php';
+        require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-logger.php';
+        require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-hubspot-integration.php';
+        
+        // Admin only
+        if (is_admin()) {
+            require_once CLARKE_CALC_PLUGIN_DIR . 'includes/class-admin-settings.php';
+        }
     }
 
     /**
@@ -69,6 +76,11 @@ class Clarke_Energy_Calculator {
         
         // Initialize AJAX handler
         new Clarke_Calculator_Ajax();
+        
+        // Initialize Admin Settings
+        if (is_admin()) {
+            new Clarke_Admin_Settings();
+        }
     }
 
     /**
@@ -120,10 +132,11 @@ class Clarke_Energy_Calculator {
 function clarke_calc_activate() {
     global $wpdb;
     
-    $table_name = $wpdb->prefix . 'clarke_calculator_leads';
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+    // Leads table
+    $leads_table = $wpdb->prefix . 'clarke_calculator_leads';
+    $sql_leads = "CREATE TABLE IF NOT EXISTS $leads_table (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         email varchar(255) NOT NULL,
         company_type varchar(100) NOT NULL,
@@ -132,12 +145,71 @@ function clarke_calc_activate() {
         recommended_strategy varchar(100) NOT NULL,
         all_answers longtext NOT NULL,
         scores longtext NOT NULL,
+        hubspot_contact_id varchar(100) DEFAULT NULL,
+        hubspot_synced_at datetime DEFAULT NULL,
+        utm_source varchar(255) DEFAULT NULL,
+        utm_medium varchar(255) DEFAULT NULL,
+        utm_campaign varchar(255) DEFAULT NULL,
+        utm_term varchar(255) DEFAULT NULL,
+        utm_content varchar(255) DEFAULT NULL,
+        referrer text DEFAULT NULL,
+        ip_address varchar(45) DEFAULT NULL,
+        user_agent text DEFAULT NULL,
         created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+        KEY email (email),
+        KEY created_at (created_at)
+    ) $charset_collate;";
+
+    // Logs table
+    $logs_table = $wpdb->prefix . 'clarke_calculator_logs';
+    $sql_logs = "CREATE TABLE IF NOT EXISTS $logs_table (
+        id bigint(20) NOT NULL AUTO_INCREMENT,
+        type varchar(50) NOT NULL,
+        lead_id mediumint(9) DEFAULT NULL,
+        message text NOT NULL,
+        request_data longtext DEFAULT NULL,
+        response_data longtext DEFAULT NULL,
+        ip_address varchar(45) DEFAULT NULL,
+        user_agent text DEFAULT NULL,
+        referrer text DEFAULT NULL,
+        utm_source varchar(255) DEFAULT NULL,
+        utm_medium varchar(255) DEFAULT NULL,
+        utm_campaign varchar(255) DEFAULT NULL,
+        utm_term varchar(255) DEFAULT NULL,
+        utm_content varchar(255) DEFAULT NULL,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        PRIMARY KEY (id),
+        KEY type (type),
+        KEY lead_id (lead_id),
+        KEY created_at (created_at)
     ) $charset_collate;";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+    dbDelta($sql_leads);
+    dbDelta($sql_logs);
+    
+    // Update existing leads table if needed (add new columns)
+    $existing_columns = $wpdb->get_col("DESCRIBE $leads_table", 0);
+    
+    $new_columns = array(
+        'hubspot_contact_id' => "ALTER TABLE $leads_table ADD COLUMN hubspot_contact_id varchar(100) DEFAULT NULL AFTER scores",
+        'hubspot_synced_at' => "ALTER TABLE $leads_table ADD COLUMN hubspot_synced_at datetime DEFAULT NULL AFTER hubspot_contact_id",
+        'utm_source' => "ALTER TABLE $leads_table ADD COLUMN utm_source varchar(255) DEFAULT NULL AFTER hubspot_synced_at",
+        'utm_medium' => "ALTER TABLE $leads_table ADD COLUMN utm_medium varchar(255) DEFAULT NULL AFTER utm_source",
+        'utm_campaign' => "ALTER TABLE $leads_table ADD COLUMN utm_campaign varchar(255) DEFAULT NULL AFTER utm_medium",
+        'utm_term' => "ALTER TABLE $leads_table ADD COLUMN utm_term varchar(255) DEFAULT NULL AFTER utm_campaign",
+        'utm_content' => "ALTER TABLE $leads_table ADD COLUMN utm_content varchar(255) DEFAULT NULL AFTER utm_term",
+        'referrer' => "ALTER TABLE $leads_table ADD COLUMN referrer text DEFAULT NULL AFTER utm_content",
+        'ip_address' => "ALTER TABLE $leads_table ADD COLUMN ip_address varchar(45) DEFAULT NULL AFTER referrer",
+        'user_agent' => "ALTER TABLE $leads_table ADD COLUMN user_agent text DEFAULT NULL AFTER ip_address",
+    );
+    
+    foreach ($new_columns as $column => $sql) {
+        if (!in_array($column, $existing_columns)) {
+            $wpdb->query($sql);
+        }
+    }
 }
 register_activation_hook(__FILE__, 'clarke_calc_activate');
 

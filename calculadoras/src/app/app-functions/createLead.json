@@ -1,0 +1,15 @@
+{
+  "uid": "createLead",
+  "type": "app-function",
+  "config": {
+    "name": "Create Lead",
+    "description": "Recebe leads da calculadora de energia e cria/atualiza contatos no HubSpot",
+    "runtime": "nodejs22.x",
+    "secrets": ["API_SECRET"],
+    "executionRules": {
+      "public": {
+        "enabled": true
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "uid": "calculadoras_app",
+  "type": "app",
+  "config": {
+    "description": "App para integração da calculadora de energia Clarke com HubSpot CRM",
+    "name": "Clarke Calculadora de Energia",
+    "distribution": "private",
+    "auth": {
+      "type": "static",
+      "requiredScopes": [
+        "oauth",
+        "crm.objects.contacts.read",
+        "crm.objects.contacts.write"
+      ],
+      "optionalScopes": [],
+      "conditionallyRequiredScopes": []
+    },
+    "permittedUrls": {
+      "fetch": [
+        "https://api.hubapi.com"
+      ],
+      "iframe": [],
+      "img": []
+    },
+    "support": {
+      "supportEmail": "diogo@uzeda.com.br",
+      "documentationUrl": "https://clarke.com.br",
+      "supportUrl": "https://clarke.com.br",
+      "supportPhone": ""
+    }
+  }
+}

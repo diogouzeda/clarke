@@ -1,0 +1,464 @@
+/**
+ * Clarke Calculator Admin Styles
+ */
+
+/* Variables */
+:root {
+    --clarke-primary: #00bf6a;
+    --clarke-primary-dark: #009955;
+    --clarke-success: #28a745;
+    --clarke-warning: #ffc107;
+    --clarke-danger: #dc3545;
+    --clarke-info: #17a2b8;
+    --clarke-secondary: #6c757d;
+    --clarke-dark: #1a1a2e;
+    --clarke-light: #f8f9fa;
+    --clarke-white: #ffffff;
+    --clarke-border: #e9ecef;
+}
+
+/* Wrap */
+.clarke-admin-wrap {
+    margin: 20px 20px 20px 0;
+}
+
+.clarke-admin-wrap h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 23px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: var(--clarke-dark);
+}
+
+.clarke-admin-wrap h1 .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--clarke-primary);
+}
+
+/* Navigation */
+.clarke-admin-nav {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--clarke-border);
+    padding-bottom: 0;
+}
+
+.clarke-admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: var(--clarke-secondary);
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s ease;
+}
+
+.clarke-admin-nav a:hover {
+    color: var(--clarke-primary);
+}
+
+.clarke-admin-nav a.active {
+    color: var(--clarke-primary);
+    border-bottom-color: var(--clarke-primary);
+}
+
+.clarke-admin-nav a .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Content */
+.clarke-admin-content {
+    margin-top: 20px;
+}
+
+/* Stats Grid */
+.clarke-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.clarke-stat-card {
+    background: var(--clarke-white);
+    border: 1px solid var(--clarke-border);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: box-shadow 0.2s ease;
+}
+
+.clarke-stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.clarke-stat-card.warning {
+    border-color: var(--clarke-danger);
+    background: #fff5f5;
+}
+
+.clarke-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clarke-stat-icon.leads {
+    background: rgba(0, 191, 106, 0.1);
+    color: var(--clarke-primary);
+}
+
+.clarke-stat-icon.today {
+    background: rgba(23, 162, 184, 0.1);
+    color: var(--clarke-info);
+}
+
+.clarke-stat-icon.synced {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--clarke-success);
+}
+
+.clarke-stat-icon.pending {
+    background: rgba(255, 193, 7, 0.1);
+    color: #d39e00;
+}
+
+.clarke-stat-icon.errors {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--clarke-danger);
+}
+
+.clarke-stat-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.clarke-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.clarke-stat-number {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--clarke-dark);
+    line-height: 1.2;
+}
+
+.clarke-stat-label {
+    font-size: 13px;
+    color: var(--clarke-secondary);
+}
+
+/* Admin Row/Col */
+.clarke-admin-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Admin Card */
+.clarke-admin-card {
+    background: var(--clarke-white);
+    border: 1px solid var(--clarke-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.clarke-admin-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--clarke-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.clarke-admin-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* Badges */
+.clarke-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    line-height: 1.4;
+}
+
+.clarke-badge.success {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--clarke-success);
+}
+
+.clarke-badge.warning {
+    background: rgba(255, 193, 7, 0.15);
+    color: #856404;
+}
+
+.clarke-badge.danger {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--clarke-danger);
+}
+
+.clarke-badge.info {
+    background: rgba(23, 162, 184, 0.1);
+    color: var(--clarke-info);
+}
+
+.clarke-badge.secondary {
+    background: rgba(108, 117, 125, 0.1);
+    color: var(--clarke-secondary);
+}
+
+/* Recent List */
+.clarke-recent-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.clarke-recent-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--clarke-border);
+}
+
+.clarke-recent-list li:last-child {
+    border-bottom: none;
+}
+
+.clarke-recent-email,
+.clarke-recent-message {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.clarke-recent-date {
+    font-size: 12px;
+    color: var(--clarke-secondary);
+}
+
+/* Filters */
+.clarke-filters {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--clarke-light);
+    border-radius: 6px;
+}
+
+.clarke-filters form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.clarke-filters input[type="text"],
+.clarke-filters input[type="date"],
+.clarke-filters select {
+    padding: 6px 12px;
+    border: 1px solid var(--clarke-border);
+    border-radius: 4px;
+}
+
+.clarke-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--clarke-primary);
+    color: var(--clarke-white);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.clarke-filter-tag a {
+    color: var(--clarke-white);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Tables */
+.clarke-admin-card .wp-list-table {
+    border: none;
+}
+
+.clarke-admin-card .wp-list-table th,
+.clarke-admin-card .wp-list-table td {
+    padding: 12px 10px;
+}
+
+.clarke-admin-card .wp-list-table code {
+    background: var(--clarke-light);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* Modal */
+.clarke-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clarke-modal-content {
+    background: var(--clarke-white);
+    border-radius: 8px;
+    padding: 25px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.clarke-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--clarke-secondary);
+    line-height: 1;
+}
+
+.clarke-modal-close:hover {
+    color: var(--clarke-dark);
+}
+
+.clarke-modal-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+}
+
+/* Log Detail Table */
+.clarke-log-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clarke-log-detail-table th,
+.clarke-log-detail-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--clarke-border);
+    vertical-align: top;
+}
+
+.clarke-log-detail-table th {
+    width: 120px;
+    font-weight: 600;
+    color: var(--clarke-secondary);
+}
+
+.clarke-log-detail-table pre {
+    background: var(--clarke-light);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12px;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Form Table */
+.form-table th .required {
+    color: var(--clarke-danger);
+}
+
+/* Connection Status */
+#clarke-connection-status {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+#clarke-connection-status.success {
+    color: var(--clarke-success);
+}
+
+#clarke-connection-status.error {
+    color: var(--clarke-danger);
+}
+
+/* Notice inline */
+.notice.inline {
+    margin: 15px 0;
+}
+
+/* Button with spinner */
+.button .spinner {
+    float: none;
+    margin: 0 0 0 5px;
+}
+
+/* Retry button */
+.clarke-retry-hubspot {
+    margin-left: 5px !important;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .clarke-admin-nav {
+        flex-wrap: wrap;
+    }
+
+    .clarke-admin-nav a {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .clarke-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .clarke-admin-row {
+        grid-template-columns: 1fr;
+    }
+
+    .clarke-filters form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .clarke-filters input,
+    .clarke-filters select,
+    .clarke-filters button {
+        width: 100%;
+    }
+}
