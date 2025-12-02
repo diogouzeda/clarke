@@ -104,11 +104,17 @@
     font-weight: 400 !important;
 }
 
-/* Options - Modern Cards */
+/* Options - Modern Cards - 2 Columns Grid */
 .clarke-options {
-    display: flex !important;
-    flex-direction: column !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
+}
+
+@media (max-width: 600px) {
+    .clarke-options {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 .clarke-option {
@@ -128,15 +134,16 @@
 .clarke-option-label {
     display: flex !important;
     align-items: center !important;
-    padding: 16px 20px !important;
+    padding: 14px 18px !important;
     background: var(--clarke-white) !important;
     border: 1px solid var(--clarke-gray) !important;
     border-radius: var(--clarke-radius-sm) !important;
     transition: var(--clarke-transition) !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
     color: var(--clarke-dark) !important;
-    gap: 14px !important;
+    gap: 12px !important;
+    text-align: left !important;
 }
 
 .clarke-option-label:hover {
@@ -150,46 +157,17 @@
     color: var(--clarke-primary-dark) !important;
 }
 
-/* Option Icon */
-.clarke-option-icon {
-    width: 40px !important;
-    height: 40px !important;
-    background: var(--clarke-gray-light) !important;
-    border-radius: var(--clarke-radius-sm) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-    transition: var(--clarke-transition) !important;
-}
-
-.clarke-option-icon svg {
-    width: 20px !important;
-    height: 20px !important;
-    color: var(--clarke-gray-dark) !important;
-    transition: var(--clarke-transition) !important;
-}
-
-.clarke-option input:checked + .clarke-option-label .clarke-option-icon {
-    background: var(--clarke-primary) !important;
-}
-
-.clarke-option input:checked + .clarke-option-label .clarke-option-icon svg {
-    color: var(--clarke-white) !important;
-}
-
-/* Option Check - Minimalist */
+/* Option Check - Left aligned */
 .clarke-option-check {
     width: 20px !important;
     height: 20px !important;
-    border: 1px solid var(--clarke-gray) !important;
+    border: 2px solid var(--clarke-gray-medium) !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     transition: var(--clarke-transition) !important;
     flex-shrink: 0 !important;
-    margin-left: auto !important;
 }
 
 .clarke-option input:checked + .clarke-option-label .clarke-option-check {
@@ -203,19 +181,6 @@
     height: 6px !important;
     background: var(--clarke-white) !important;
     border-radius: 50% !important;
-}
-
-/* Grid Options */
-.clarke-options-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-}
-
-@media (max-width: 500px) {
-    .clarke-options-grid {
-        grid-template-columns: 1fr !important;
-    }
 }
 
 /* Navigation Buttons */
