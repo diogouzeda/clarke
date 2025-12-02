@@ -796,7 +796,7 @@ class Clarke_Admin_Settings {
     }
 
     /**
-     * AJAX: Refresh HubSpot properties
+     * AJAX: Refresh HubSpot properties (não utilizado na nova integração via App)
      */
     public function ajax_refresh_properties() {
         check_ajax_referer('clarke_admin_nonce', 'nonce');
@@ -805,16 +805,9 @@ class Clarke_Admin_Settings {
             wp_send_json_error(array('message' => 'Sem permissão'));
         }
 
-        Clarke_HubSpot_Integration::clear_properties_cache();
-        $properties = Clarke_HubSpot_Integration::get_contact_properties();
-
-        if (empty($properties)) {
-            wp_send_json_error(array('message' => 'Nenhuma propriedade encontrada. Verifique a API Key.'));
-        }
-
+        // Na nova integração via HubSpot App, não é necessário carregar propriedades
         wp_send_json_success(array(
-            'message' => count($properties) . ' propriedades carregadas',
-            'properties' => $properties,
+            'message' => 'Integração via HubSpot App não requer mapeamento de propriedades',
         ));
     }
 }
