@@ -294,7 +294,7 @@
     height: 100% !important;
     background: linear-gradient(90deg, #00bf6a 0%, #009955 100%) !important;
     border-radius: 4px 0 0 4px !important;
-    width: 0% !important;
+    width: 0%;
     transition: width 0.15s ease-out !important;
     pointer-events: none !important;
 }
