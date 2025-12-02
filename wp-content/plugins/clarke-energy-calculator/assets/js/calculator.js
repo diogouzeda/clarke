@@ -274,10 +274,38 @@
 
         // Update progress bar
         updateProgress: function() {
-            const progress = (this.currentStep / this.totalSteps) * 100;
+            const progress = Math.round((this.currentStep / this.totalSteps) * 100);
             $('.clarke-progress-fill').css('width', `${progress}%`);
             $('.current-step').text(Math.max(1, this.currentStep));
             $('.total-steps').text(this.totalSteps);
+            
+            // Animate percentage counter
+            const $percent = $('.progress-percent');
+            const currentPercent = parseInt($percent.text()) || 0;
+            this.animateValue($percent, currentPercent, progress, 400);
+        },
+
+        // Animate numeric value
+        animateValue: function($element, start, end, duration) {
+            const range = end - start;
+            const startTime = performance.now();
+            
+            const animate = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function (ease-out)
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(start + (range * easeOut));
+                
+                $element.text(current);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            };
+            
+            requestAnimationFrame(animate);
         },
 
         // Submit form

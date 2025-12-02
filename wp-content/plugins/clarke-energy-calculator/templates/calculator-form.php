@@ -12,10 +12,18 @@ if (!defined('ABSPATH')) {
     
     <!-- Progress Bar -->
     <div class="clarke-progress">
-        <div class="clarke-progress-bar">
-            <div class="clarke-progress-fill" style="width: 0%"></div>
+        <div class="clarke-progress-header">
+            <span class="clarke-progress-label">Progresso</span>
+            <span class="clarke-progress-percentage"><span class="progress-percent">0</span>%</span>
         </div>
-        <div class="clarke-progress-text">Pergunta <span class="current-step">1</span> de <span class="total-steps">15</span></div>
+        <div class="clarke-progress-bar">
+            <div class="clarke-progress-fill" style="width: 0%">
+                <div class="clarke-progress-glow"></div>
+            </div>
+        </div>
+        <div class="clarke-progress-steps">
+            <span class="clarke-progress-text">Etapa <span class="current-step">1</span> de <span class="total-steps">15</span></span>
+        </div>
     </div>
 
     <!-- Form -->
