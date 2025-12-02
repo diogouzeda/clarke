@@ -78,8 +78,7 @@ class Clarke_Admin_Settings {
      * Register settings
      */
     public function register_settings() {
-        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_ENDPOINT_URL);
-        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_API_SECRET);
+        register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_ACCESS_TOKEN);
         register_setting('clarke_hubspot_settings', Clarke_HubSpot_Integration::OPTION_ENABLED);
     }
 
@@ -215,7 +214,7 @@ class Clarke_Admin_Settings {
                 <h3>Status da Integração HubSpot</h3>
                 <?php
                 $hubspot_enabled = Clarke_HubSpot_Integration::is_enabled();
-                $endpoint_url = Clarke_HubSpot_Integration::get_endpoint_url();
+                $access_token = Clarke_HubSpot_Integration::get_access_token();
                 ?>
                 <p>
                     <strong>Status:</strong> 
@@ -226,8 +225,8 @@ class Clarke_Admin_Settings {
                     <?php endif; ?>
                 </p>
                 <p>
-                    <strong>Endpoint:</strong> 
-                    <?php echo !empty($endpoint_url) ? '<span class="clarke-badge success">Configurado</span>' : '<span class="clarke-badge danger">Não configurado</span>'; ?>
+                    <strong>Token:</strong> 
+                    <?php echo !empty($access_token) ? '<span class="clarke-badge success">Configurado</span>' : '<span class="clarke-badge danger">Não configurado</span>'; ?>
                 </p>
                 <p><a href="<?php echo admin_url('admin.php?page=clarke-calculator-hubspot'); ?>" class="button">Configurar HubSpot</a></p>
             </div>
@@ -508,17 +507,15 @@ class Clarke_Admin_Settings {
         
         // Handle form submission
         if (isset($_POST['clarke_hubspot_submit']) && check_admin_referer('clarke_hubspot_settings')) {
-            $endpoint_url = esc_url_raw($_POST['hubspot_endpoint_url']);
-            $api_secret = sanitize_text_field($_POST['hubspot_api_secret']);
+            $access_token = sanitize_text_field($_POST['hubspot_access_token']);
             $enabled = isset($_POST['hubspot_enabled']) ? true : false;
             
-            Clarke_HubSpot_Integration::save_settings($endpoint_url, $api_secret, $enabled);
+            Clarke_HubSpot_Integration::save_settings($access_token, $enabled);
             
             echo '<div class="notice notice-success"><p>Configurações salvas com sucesso!</p></div>';
         }
         
-        $endpoint_url = Clarke_HubSpot_Integration::get_endpoint_url();
-        $api_secret = Clarke_HubSpot_Integration::get_api_secret();
+        $access_token = Clarke_HubSpot_Integration::get_access_token();
         $enabled = get_option('clarke_hubspot_enabled', false);
         
         ?>
@@ -527,32 +524,21 @@ class Clarke_Admin_Settings {
                 <?php wp_nonce_field('clarke_hubspot_settings'); ?>
                 
                 <div class="clarke-admin-card">
-                    <h3>Conexão com HubSpot App</h3>
-                    <p class="description">Configure a integração com o HubSpot App criado via Developer Projects.</p>
+                    <h3>Conexão com HubSpot</h3>
+                    <p class="description">Configure a integração direta com a API do HubSpot usando um Private App Token.</p>
                     
                     <table class="form-table">
                         <tr>
                             <th scope="row">
-                                <label for="hubspot_endpoint_url">URL do Endpoint</label>
+                                <label for="hubspot_access_token">Token de Acesso</label>
                             </th>
                             <td>
-                                <input type="url" id="hubspot_endpoint_url" name="hubspot_endpoint_url" value="<?php echo esc_attr($endpoint_url); ?>" class="large-text" placeholder="https://api.hubspot.com/automation/v4/actions/...">
-                                <p class="description">
-                                    URL pública da função <code>createLead</code> do HubSpot App.<br>
-                                    Encontre em: <strong>HubSpot → Desenvolvimento → Projetos → calculadoras → App → createLead</strong>
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="hubspot_api_secret">API Secret</label>
-                            </th>
-                            <td>
-                                <input type="password" id="hubspot_api_secret" name="hubspot_api_secret" value="<?php echo esc_attr($api_secret); ?>" class="regular-text">
-                                <button type="button" id="clarke-test-connection" class="button">Testar Conexão</button>
+                                <input type="password" id="hubspot_access_token" name="hubspot_access_token" value="<?php echo esc_attr($access_token); ?>" class="large-text" placeholder="pat-na1-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                                <button type="button" id="clarke-test-connection" class="button" style="margin-top: 5px;">Testar Conexão</button>
                                 <span id="clarke-connection-status"></span>
                                 <p class="description">
-                                    Chave secreta para autenticar as requisições. Defina o mesmo valor no Secret <code>API_SECRET</code> do HubSpot App.
+                                    Token de acesso do Private App do HubSpot.<br>
+                                    Encontre em: <strong>HubSpot → Configurações → Integrações → Private Apps</strong>
                                 </p>
                             </td>
                         </tr>
@@ -569,20 +555,16 @@ class Clarke_Admin_Settings {
                 </div>
                 
                 <div class="clarke-admin-card">
-                    <h3>Instruções de Configuração</h3>
+                    <h3>Onde encontrar o Token de Acesso</h3>
+                    <p>O Token de Acesso está disponível na página do seu projeto HubSpot:</p>
                     <ol>
-                        <li>No HubSpot, vá em <strong>Desenvolvimento → Projetos → calculadoras</strong></li>
+                        <li>Acesse <strong>Desenvolvimento → Projetos → calculadoras</strong></li>
                         <li>Clique no App <strong>Clarke Calculadora de Energia</strong></li>
-                        <li>Encontre a função <strong>createLead</strong> e copie a <strong>URL pública</strong></li>
-                        <li>Configure os Secrets do App:
-                            <ul>
-                                <li><code>API_SECRET</code>: Crie uma chave secreta e use o mesmo valor aqui</li>
-                            </ul>
-                        </li>
-                        <li>Cole a URL e o Secret nos campos acima</li>
-                        <li>Clique em "Testar Conexão" para verificar</li>
-                        <li>Ative a integração e salve</li>
+                        <li>Vá na aba <strong>Distribuição</strong></li>
+                        <li>Copie o <strong>Token de Acesso</strong> (pat-na1-...)</li>
+                        <li>Cole no campo acima e salve</li>
                     </ol>
+                    <p><strong>Importante:</strong> O Token precisa ter os escopos: <code>crm.objects.contacts.read</code> e <code>crm.objects.contacts.write</code></p>
                 </div>
                 
                 <p class="submit">
@@ -702,10 +684,9 @@ class Clarke_Admin_Settings {
             wp_send_json_error(array('message' => 'Sem permissão'));
         }
 
-        $endpoint_url = isset($_POST['endpoint_url']) ? esc_url_raw($_POST['endpoint_url']) : '';
-        $api_secret = isset($_POST['api_secret']) ? sanitize_text_field($_POST['api_secret']) : '';
+        $access_token = isset($_POST['access_token']) ? sanitize_text_field($_POST['access_token']) : '';
         
-        $result = Clarke_HubSpot_Integration::test_connection($endpoint_url, $api_secret);
+        $result = Clarke_HubSpot_Integration::test_connection($access_token);
 
         if ($result['success']) {
             wp_send_json_success($result);

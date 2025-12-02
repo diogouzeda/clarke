@@ -52,16 +52,10 @@
 
             const $button = $(e.target);
             const $status = $('#clarke-connection-status');
-            const endpointUrl = $('#hubspot_endpoint_url').val();
-            const apiSecret = $('#hubspot_api_secret').val();
+            const accessToken = $('#hubspot_access_token').val();
 
-            if (!endpointUrl) {
-                $status.removeClass('success').addClass('error').text('Insira a URL do Endpoint');
-                return;
-            }
-
-            if (!apiSecret) {
-                $status.removeClass('success').addClass('error').text('Insira o API Secret');
+            if (!accessToken) {
+                $status.removeClass('success').addClass('error').text('Insira o Token de Acesso');
                 return;
             }
 
@@ -74,8 +68,7 @@
                 data: {
                     action: 'clarke_test_hubspot',
                     nonce: clarkeAdmin.nonce,
-                    endpoint_url: endpointUrl,
-                    api_secret: apiSecret
+                    access_token: accessToken
                 },
                 success: function(response) {
                     if (response.success) {
