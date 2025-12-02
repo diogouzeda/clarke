@@ -1,71 +1,80 @@
 /**
  * Clarke Energy Calculator Styles
- * Modern, clean and responsive design
+ * Modern, clean and minimalist design
  */
 
 :root {
     --clarke-primary: #00bf6a !important;
-    --clarke-primary-dark: #005931 !important;
+    --clarke-primary-dark: #009955 !important;
+    --clarke-primary-light: #e6f9f0 !important;
     --clarke-white: #ffffff !important;
-    --clarke-dark: #222222 !important;
-    --clarke-gray-light: #f5f5f5 !important;
-    --clarke-gray: #e0e0e0 !important;
-    --clarke-gray-dark: #666666 !important;
-    --clarke-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-    --clarke-transition: all 0.3s ease !important;
+    --clarke-dark: #1a1a2e !important;
+    --clarke-gray-light: #f8f9fa !important;
+    --clarke-gray: #e9ecef !important;
+    --clarke-gray-medium: #adb5bd !important;
+    --clarke-gray-dark: #6c757d !important;
+    --clarke-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    --clarke-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    --clarke-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+    --clarke-radius: 12px !important;
+    --clarke-radius-sm: 8px !important;
+    --clarke-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Container */
 .clarke-calculator {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-    max-width: 800px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    max-width: 720px !important;
     margin: 0 auto !important;
-    padding: 20px !important;
+    padding: 32px !important;
     background: var(--clarke-white) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--clarke-shadow) !important;
+    border-radius: var(--clarke-radius) !important;
+    border: 1px solid var(--clarke-gray) !important;
+    box-shadow: var(--clarke-shadow-lg) !important;
 }
 
 /* Progress Bar */
 .clarke-progress {
-    margin-bottom: 40px !important;
+    margin-bottom: 48px !important;
 }
 
 .clarke-progress-bar {
-    height: 6px !important;
+    height: 4px !important;
     background: var(--clarke-gray) !important;
-    border-radius: 3px !important;
+    border-radius: 2px !important;
     overflow: hidden !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 12px !important;
 }
 
 .clarke-progress-fill {
     height: 100% !important;
-    background: linear-gradient(90deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
-    border-radius: 3px !important;
-    transition: width 0.4s ease !important;
+    background: var(--clarke-primary) !important;
+    border-radius: 2px !important;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .clarke-progress-text {
-    font-size: 14px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
     color: var(--clarke-gray-dark) !important;
-    text-align: right !important;
+    text-align: center !important;
+    letter-spacing: 0.02em !important;
 }
 
 /* Steps */
 .clarke-step {
     display: none !important;
-    animation: fadeIn 0.4s ease !important;
+    animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .clarke-step.active {
     display: block !important;
 }
 
-@keyframes fadeIn {
+@keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(16px);
     }
     to {
         opacity: 1;
@@ -75,28 +84,31 @@
 
 /* Question */
 .clarke-question {
-    margin-bottom: 30px !important;
+    margin-bottom: 32px !important;
+    text-align: center !important;
 }
 
 .clarke-question h3 {
-    font-size: 24px !important;
+    font-size: 22px !important;
     font-weight: 600 !important;
     color: var(--clarke-dark) !important;
     margin-bottom: 8px !important;
-    line-height: 1.3 !important;
+    line-height: 1.4 !important;
+    letter-spacing: -0.02em !important;
 }
 
 .clarke-question p {
-    font-size: 16px !important;
+    font-size: 15px !important;
     color: var(--clarke-gray-dark) !important;
     margin-bottom: 0 !important;
+    font-weight: 400 !important;
 }
 
-/* Options */
+/* Options - Modern Cards */
 .clarke-options {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
+    gap: 10px !important;
 }
 
 .clarke-option {
@@ -108,43 +120,76 @@
     position: absolute !important;
     opacity: 0 !important;
     cursor: pointer !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
 }
 
 .clarke-option-label {
     display: flex !important;
     align-items: center !important;
     padding: 16px 20px !important;
-    background: var(--clarke-gray-light) !important;
-    border: 2px solid transparent !important;
-    border-radius: 12px !important;
+    background: var(--clarke-white) !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
     transition: var(--clarke-transition) !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
     color: var(--clarke-dark) !important;
+    gap: 14px !important;
 }
 
 .clarke-option-label:hover {
-    background: #e8f9f0 !important;
-    border-color: var(--clarke-primary) !important;
+    background: var(--clarke-gray-light) !important;
+    border-color: var(--clarke-gray-medium) !important;
 }
 
 .clarke-option input:checked + .clarke-option-label {
-    background: #e8f9f0 !important;
+    background: var(--clarke-primary-light) !important;
     border-color: var(--clarke-primary) !important;
     color: var(--clarke-primary-dark) !important;
-    font-weight: 500 !important;
 }
 
+/* Option Icon */
+.clarke-option-icon {
+    width: 40px !important;
+    height: 40px !important;
+    background: var(--clarke-gray-light) !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    transition: var(--clarke-transition) !important;
+}
+
+.clarke-option-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    color: var(--clarke-gray-dark) !important;
+    transition: var(--clarke-transition) !important;
+}
+
+.clarke-option input:checked + .clarke-option-label .clarke-option-icon {
+    background: var(--clarke-primary) !important;
+}
+
+.clarke-option input:checked + .clarke-option-label .clarke-option-icon svg {
+    color: var(--clarke-white) !important;
+}
+
+/* Option Check - Minimalist */
 .clarke-option-check {
-    width: 24px !important;
-    height: 24px !important;
-    border: 2px solid var(--clarke-gray) !important;
+    width: 20px !important;
+    height: 20px !important;
+    border: 1px solid var(--clarke-gray) !important;
     border-radius: 50% !important;
-    margin-right: 14px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     transition: var(--clarke-transition) !important;
     flex-shrink: 0 !important;
+    margin-left: auto !important;
 }
 
 .clarke-option input:checked + .clarke-option-label .clarke-option-check {
@@ -154,20 +199,20 @@
 
 .clarke-option input:checked + .clarke-option-label .clarke-option-check::after {
     content: '' !important;
-    width: 8px !important;
-    height: 8px !important;
+    width: 6px !important;
+    height: 6px !important;
     background: var(--clarke-white) !important;
     border-radius: 50% !important;
 }
 
-/* Grid Options (for some questions) */
+/* Grid Options */
 .clarke-options-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
+    gap: 10px !important;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .clarke-options-grid {
         grid-template-columns: 1fr !important;
     }
@@ -177,66 +222,70 @@
 .clarke-navigation {
     display: flex !important;
     justify-content: space-between !important;
+    align-items: center !important;
     gap: 16px !important;
     margin-top: 40px !important;
-    padding-top: 30px !important;
+    padding-top: 24px !important;
     border-top: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-btn {
-    padding: 14px 32px !important;
-    font-size: 16px !important;
+    padding: 12px 28px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     border: none !important;
-    border-radius: 8px !important;
+    border-radius: var(--clarke-radius-sm) !important;
     cursor: pointer !important;
     transition: var(--clarke-transition) !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 8px !important;
+    letter-spacing: 0.01em !important;
 }
 
 .clarke-btn-back {
     background: transparent !important;
     color: var(--clarke-gray-dark) !important;
-    border: 2px solid var(--clarke-gray) !important;
+    padding: 12px 16px !important;
 }
 
 .clarke-btn-back:hover {
+    color: var(--clarke-dark) !important;
     background: var(--clarke-gray-light) !important;
-    border-color: var(--clarke-gray-dark) !important;
 }
 
 .clarke-btn-next,
 .clarke-btn-submit {
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    background: var(--clarke-primary) !important;
     color: var(--clarke-white) !important;
     margin-left: auto !important;
 }
 
 .clarke-btn-next:hover,
 .clarke-btn-submit:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4) !important;
+    background: var(--clarke-primary-dark) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 191, 106, 0.3) !important;
 }
 
 .clarke-btn:disabled {
-    opacity: 0.5 !important;
+    opacity: 0.4 !important;
     cursor: not-allowed !important;
     transform: none !important;
+    box-shadow: none !important;
 }
 
 .clarke-btn svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 16px !important;
+    height: 16px !important;
 }
 
 /* Residential Message */
 .clarke-residential-message {
     display: none !important;
     text-align: center !important;
-    padding: 40px 20px !important;
-    animation: fadeIn 0.4s ease !important;
+    padding: 48px 24px !important;
+    animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .clarke-residential-message.show {
@@ -244,32 +293,33 @@
 }
 
 .clarke-residential-icon {
-    width: 80px !important;
-    height: 80px !important;
-    background: #fff3cd !important;
+    width: 64px !important;
+    height: 64px !important;
+    background: #fef3c7 !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin: 0 auto 24px !important;
+    margin: 0 auto 20px !important;
 }
 
 .clarke-residential-icon svg {
-    width: 40px !important;
-    height: 40px !important;
-    color: #856404 !important;
+    width: 28px !important;
+    height: 28px !important;
+    color: #d97706 !important;
 }
 
 .clarke-residential-message h3 {
-    font-size: 22px !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 12px !important;
 }
 
 .clarke-residential-message p {
-    font-size: 16px !important;
+    font-size: 15px !important;
     color: var(--clarke-gray-dark) !important;
-    max-width: 500px !important;
+    max-width: 400px !important;
     margin: 0 auto !important;
     line-height: 1.6 !important;
 }
@@ -280,47 +330,51 @@
 }
 
 .clarke-email-step .clarke-question h3 {
-    margin-bottom: 16px !important;
+    margin-bottom: 12px !important;
 }
 
 .clarke-email-form {
-    max-width: 400px !important;
+    max-width: 360px !important;
     margin: 0 auto !important;
 }
 
 .clarke-input-group {
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
 }
 
 .clarke-input {
     width: 100% !important;
-    padding: 16px 20px !important;
-    font-size: 16px !important;
-    border: 2px solid var(--clarke-gray) !important;
-    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
     transition: var(--clarke-transition) !important;
     box-sizing: border-box !important;
+    background: var(--clarke-white) !important;
 }
 
 .clarke-input:focus {
     outline: none !important;
     border-color: var(--clarke-primary) !important;
-    box-shadow: 0 0 0 4px rgba(0, 191, 106, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(0, 191, 106, 0.1) !important;
 }
 
 .clarke-input::placeholder {
-    color: var(--clarke-gray-dark) !important;
+    color: var(--clarke-gray-medium) !important;
+    font-weight: 400 !important;
 }
 
 .clarke-privacy-text {
-    font-size: 13px !important;
+    font-size: 12px !important;
     color: var(--clarke-gray-dark) !important;
-    margin-top: 16px !important;
+    margin-top: 12px !important;
 }
 
 .clarke-privacy-text a {
     color: var(--clarke-primary) !important;
     text-decoration: none !important;
+    font-weight: 500 !important;
 }
 
 .clarke-privacy-text a:hover {
@@ -331,7 +385,7 @@
 .clarke-loading {
     display: none !important;
     text-align: center !important;
-    padding: 60px 20px !important;
+    padding: 64px 24px !important;
 }
 
 .clarke-loading.show {
@@ -339,12 +393,12 @@
 }
 
 .clarke-spinner {
-    width: 50px !important;
-    height: 50px !important;
-    border: 4px solid var(--clarke-gray) !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: 3px solid var(--clarke-gray) !important;
     border-top-color: var(--clarke-primary) !important;
     border-radius: 50% !important;
-    animation: spin 1s linear infinite !important;
+    animation: spin 0.8s linear infinite !important;
     margin: 0 auto 20px !important;
 }
 
@@ -355,14 +409,15 @@
 }
 
 .clarke-loading p {
-    font-size: 18px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
     color: var(--clarke-dark) !important;
 }
 
 /* Results */
 .clarke-results {
     display: none !important;
-    animation: fadeIn 0.5s ease !important;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .clarke-results.show {
@@ -371,36 +426,37 @@
 
 .clarke-results-header {
     text-align: center !important;
-    padding: 30px 0 40px !important;
+    padding: 24px 0 32px !important;
     border-bottom: 1px solid var(--clarke-gray) !important;
-    margin-bottom: 40px !important;
+    margin-bottom: 32px !important;
 }
 
 .clarke-badge {
     display: inline-block !important;
-    padding: 8px 20px !important;
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    padding: 6px 14px !important;
+    background: var(--clarke-primary) !important;
     color: var(--clarke-white) !important;
     border-radius: 20px !important;
-    font-size: 14px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 0.05em !important;
     margin-bottom: 16px !important;
 }
 
 .clarke-results-header h2 {
-    font-size: 32px !important;
+    font-size: 26px !important;
     font-weight: 700 !important;
     color: var(--clarke-dark) !important;
     margin-bottom: 8px !important;
+    letter-spacing: -0.02em !important;
 }
 
 .clarke-strategy-name {
-    font-size: 28px !important;
+    font-size: 24px !important;
     color: var(--clarke-primary) !important;
     font-weight: 700 !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
 }
 
 .clarke-stars {
@@ -410,9 +466,9 @@
 }
 
 .clarke-star {
-    width: 28px !important;
-    height: 28px !important;
-    color: #ffc107 !important;
+    width: 24px !important;
+    height: 24px !important;
+    color: #fbbf24 !important;
 }
 
 .clarke-star.empty {
@@ -421,31 +477,32 @@
 
 /* Economy Cards */
 .clarke-economy-section {
-    margin-bottom: 40px !important;
+    margin-bottom: 32px !important;
 }
 
 .clarke-economy-section h3 {
-    font-size: 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
 }
 
 .clarke-economy-section h3 svg {
-    width: 24px !important;
-    height: 24px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: var(--clarke-primary) !important;
 }
 
 .clarke-economy-cards {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
-    gap: 16px !important;
+    gap: 12px !important;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
     .clarke-economy-cards {
         grid-template-columns: 1fr !important;
     }
@@ -453,48 +510,54 @@
 
 .clarke-economy-card {
     background: var(--clarke-gray-light) !important;
-    border-radius: 12px !important;
-    padding: 24px !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    padding: 20px !important;
     text-align: center !important;
 }
 
 .clarke-economy-card.highlight {
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    background: var(--clarke-primary) !important;
+    border-color: var(--clarke-primary) !important;
     color: var(--clarke-white) !important;
 }
 
 .clarke-economy-label {
-    font-size: 14px !important;
-    margin-bottom: 8px !important;
-    opacity: 0.8 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    margin-bottom: 6px !important;
+    opacity: 0.7 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
 }
 
 .clarke-economy-value {
-    font-size: 24px !important;
+    font-size: 22px !important;
     font-weight: 700 !important;
 }
 
 .clarke-economy-card.highlight .clarke-economy-value {
-    font-size: 28px !important;
+    font-size: 24px !important;
 }
 
 /* Reasons */
 .clarke-reasons {
-    margin-bottom: 40px !important;
+    margin-bottom: 32px !important;
 }
 
 .clarke-reasons h3 {
-    font-size: 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
 }
 
 .clarke-reasons h3 svg {
-    width: 24px !important;
-    height: 24px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: var(--clarke-primary) !important;
 }
 
@@ -508,9 +571,10 @@
     display: flex !important;
     align-items: flex-start !important;
     gap: 12px !important;
-    padding: 16px 0 !important;
+    padding: 14px 0 !important;
     border-bottom: 1px solid var(--clarke-gray) !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
     color: var(--clarke-dark) !important;
 }
 
@@ -519,48 +583,49 @@
 }
 
 .clarke-reasons-list li svg {
-    width: 24px !important;
-    height: 24px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: var(--clarke-primary) !important;
     flex-shrink: 0 !important;
-    margin-top: 2px !important;
+    margin-top: 1px !important;
 }
 
 /* Comparison Table */
 .clarke-comparison {
-    margin-bottom: 40px !important;
+    margin-bottom: 32px !important;
 }
 
 .clarke-comparison h3 {
-    font-size: 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
 }
 
 .clarke-comparison h3 svg {
-    width: 24px !important;
-    height: 24px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: var(--clarke-primary) !important;
 }
 
 .clarke-table-wrapper {
     overflow-x: auto !important;
-    border-radius: 12px !important;
+    border-radius: var(--clarke-radius-sm) !important;
     border: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-table {
     width: 100% !important;
     border-collapse: collapse !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
 }
 
 .clarke-table th,
 .clarke-table td {
-    padding: 14px 16px !important;
+    padding: 12px 14px !important;
     text-align: left !important;
     border-bottom: 1px solid var(--clarke-gray) !important;
 }
@@ -570,22 +635,25 @@
     font-weight: 600 !important;
     color: var(--clarke-dark) !important;
     white-space: nowrap !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
 }
 
 .clarke-table tbody tr:hover {
-    background: #f9f9f9 !important;
+    background: var(--clarke-gray-light) !important;
 }
 
 .clarke-table tbody tr.winner {
-    background: #e8f9f0 !important;
+    background: var(--clarke-primary-light) !important;
 }
 
 .clarke-table tbody tr.winner td {
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .clarke-table tbody tr.disqualified {
-    opacity: 0.5 !important;
+    opacity: 0.4 !important;
 }
 
 .clarke-table .strategy-name {
@@ -597,21 +665,21 @@
 .clarke-table .winner-badge {
     background: var(--clarke-primary) !important;
     color: var(--clarke-white) !important;
-    font-size: 11px !important;
-    padding: 3px 8px !important;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
     border-radius: 10px !important;
     font-weight: 600 !important;
 }
 
 .clarke-mini-stars {
     display: flex !important;
-    gap: 2px !important;
+    gap: 1px !important;
 }
 
 .clarke-mini-star {
-    width: 14px !important;
-    height: 14px !important;
-    color: #ffc107 !important;
+    width: 12px !important;
+    height: 12px !important;
+    color: #fbbf24 !important;
 }
 
 .clarke-mini-star.empty {
@@ -621,85 +689,89 @@
 /* Next Steps */
 .clarke-next-steps {
     background: var(--clarke-gray-light) !important;
-    border-radius: 12px !important;
-    padding: 30px !important;
-    margin-bottom: 30px !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    padding: 24px !important;
+    margin-bottom: 24px !important;
 }
 
 .clarke-next-steps h3 {
-    font-size: 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 12px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
 }
 
 .clarke-next-steps h3 svg {
-    width: 24px !important;
-    height: 24px !important;
+    width: 20px !important;
+    height: 20px !important;
     color: var(--clarke-primary) !important;
 }
 
 .clarke-next-steps p {
-    font-size: 16px !important;
+    font-size: 14px !important;
     color: var(--clarke-gray-dark) !important;
-    margin-bottom: 24px !important;
+    margin-bottom: 20px !important;
     line-height: 1.6 !important;
 }
 
 .clarke-cta-btn {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 10px !important;
-    padding: 16px 32px !important;
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    gap: 8px !important;
+    padding: 14px 28px !important;
+    background: var(--clarke-primary) !important;
     color: var(--clarke-white) !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     border: none !important;
-    border-radius: 8px !important;
+    border-radius: var(--clarke-radius-sm) !important;
     cursor: pointer !important;
     text-decoration: none !important;
     transition: var(--clarke-transition) !important;
 }
 
 .clarke-cta-btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4) !important;
+    background: var(--clarke-primary-dark) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 191, 106, 0.3) !important;
     color: var(--clarke-white) !important;
 }
 
 .clarke-cta-btn svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 16px !important;
+    height: 16px !important;
 }
 
 /* Disclaimer */
 .clarke-disclaimer {
-    font-size: 13px !important;
+    font-size: 12px !important;
     color: var(--clarke-gray-dark) !important;
     text-align: center !important;
-    padding: 20px !important;
+    padding: 16px !important;
     background: var(--clarke-gray-light) !important;
-    border-radius: 8px !important;
-    line-height: 1.6 !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    line-height: 1.5 !important;
 }
 
 /* Restart Button */
 .clarke-restart {
     text-align: center !important;
-    margin-top: 30px !important;
+    margin-top: 24px !important;
 }
 
 .clarke-restart-btn {
     background: transparent !important;
-    border: 2px solid var(--clarke-gray) !important;
+    border: 1px solid var(--clarke-gray) !important;
     color: var(--clarke-gray-dark) !important;
-    padding: 12px 24px !important;
-    font-size: 14px !important;
+    padding: 10px 20px !important;
+    font-size: 13px !important;
     font-weight: 500 !important;
-    border-radius: 8px !important;
+    border-radius: var(--clarke-radius-sm) !important;
     cursor: pointer !important;
     transition: var(--clarke-transition) !important;
 }
@@ -709,47 +781,41 @@
     color: var(--clarke-primary) !important;
 }
 
-/* Footer */
-.clarke-footer {
-    text-align: center !important;
-    padding-top: 20px !important;
-    margin-top: 20px !important;
-    border-top: 1px solid var(--clarke-gray) !important;
-}
-
-.clarke-footer a {
-    font-size: 13px !important;
-    color: var(--clarke-gray-dark) !important;
-    text-decoration: none !important;
-}
-
-.clarke-footer a:hover {
-    color: var(--clarke-primary) !important;
-}
-
 /* Responsive */
 @media (max-width: 600px) {
     .clarke-calculator {
-        padding: 16px !important;
-        border-radius: 12px !important;
+        padding: 20px !important;
+        border-radius: var(--clarke-radius-sm) !important;
+        margin: 0 12px !important;
     }
 
     .clarke-question h3 {
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
 
     .clarke-option-label {
         padding: 14px 16px !important;
-        font-size: 15px !important;
+        font-size: 14px !important;
+    }
+
+    .clarke-option-icon {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .clarke-option-icon svg {
+        width: 18px !important;
+        height: 18px !important;
     }
 
     .clarke-btn {
-        padding: 12px 24px !important;
-        font-size: 15px !important;
+        padding: 12px 20px !important;
+        font-size: 13px !important;
     }
 
     .clarke-navigation {
         flex-direction: column-reverse !important;
+        gap: 12px !important;
     }
 
     .clarke-btn-back,
@@ -760,18 +826,18 @@
     }
 
     .clarke-results-header h2 {
-        font-size: 24px !important;
-    }
-
-    .clarke-strategy-name {
-        font-size: 22px !important;
-    }
-
-    .clarke-economy-value {
         font-size: 20px !important;
     }
 
+    .clarke-strategy-name {
+        font-size: 18px !important;
+    }
+
+    .clarke-economy-value {
+        font-size: 18px !important;
+    }
+
     .clarke-economy-card.highlight .clarke-economy-value {
-        font-size: 24px !important;
+        font-size: 20px !important;
     }
 }

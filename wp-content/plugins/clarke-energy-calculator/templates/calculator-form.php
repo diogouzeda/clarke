@@ -806,9 +806,4 @@ if (!defined('ABSPATH')) {
         <!-- Content will be injected by JavaScript -->
     </div>
 
-    <!-- Footer -->
-    <div class="clarke-footer">
-        <a href="https://uzeda.com.br" target="_blank">Desenvolvido por Diogo Uzêda</a>
-    </div>
-
 </div>
