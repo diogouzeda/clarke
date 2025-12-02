@@ -183,6 +183,48 @@
     border-radius: 50% !important;
 }
 
+/* Option Icons - Lucide Style */
+.clarke-option-icon {
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--clarke-gray-light) !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    transition: var(--clarke-transition) !important;
+    flex-shrink: 0 !important;
+}
+
+.clarke-option-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: var(--clarke-gray-dark) !important;
+    transition: var(--clarke-transition) !important;
+}
+
+.clarke-option-label:hover .clarke-option-icon {
+    background: rgba(0, 191, 106, 0.1) !important;
+}
+
+.clarke-option-label:hover .clarke-option-icon svg {
+    stroke: var(--clarke-primary) !important;
+}
+
+.clarke-option input:checked + .clarke-option-label .clarke-option-icon {
+    background: rgba(0, 191, 106, 0.15) !important;
+}
+
+.clarke-option input:checked + .clarke-option-label .clarke-option-icon svg {
+    stroke: var(--clarke-primary) !important;
+}
+
+/* Option Text */
+.clarke-option-text {
+    flex: 1 !important;
+    text-align: left !important;
+}
+
 /* Navigation Buttons */
 .clarke-navigation {
     display: flex !important;
