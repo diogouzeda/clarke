@@ -282,7 +282,7 @@
     left: 0 !important;
     right: 0 !important;
     height: 8px !important;
-    background: var(--clarke-gray) !important;
+    background: #e9ecef !important;
     border-radius: 4px !important;
     transform: translateY(-50%) !important;
     z-index: 1 !important;
@@ -292,7 +292,7 @@
 
 .clarke-range-fill {
     height: 100% !important;
-    background: linear-gradient(90deg, var(--clarke-primary) 0%, var(--clarke-primary-dark) 100%) !important;
+    background: linear-gradient(90deg, #00bf6a 0%, #009955 100%) !important;
     border-radius: 4px 0 0 4px !important;
     width: 0% !important;
     transition: width 0.15s ease-out !important;
@@ -305,8 +305,8 @@
     appearance: none !important;
     width: 28px !important;
     height: 28px !important;
-    background: var(--clarke-white) !important;
-    border: 3px solid var(--clarke-primary) !important;
+    background: #ffffff !important;
+    border: 3px solid #00bf6a !important;
     border-radius: 50% !important;
     cursor: grab !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
@@ -328,8 +328,8 @@
 .clarke-range-slider::-moz-range-thumb {
     width: 28px !important;
     height: 28px !important;
-    background: var(--clarke-white) !important;
-    border: 3px solid var(--clarke-primary) !important;
+    background: #ffffff !important;
+    border: 3px solid #00bf6a !important;
     border-radius: 50% !important;
     cursor: grab !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
@@ -351,7 +351,7 @@
     justify-content: space-between !important;
     margin-top: 12px !important;
     font-size: 13px !important;
-    color: var(--clarke-gray-dark) !important;
+    color: #6c757d !important;
     font-weight: 500 !important;
 }
 
