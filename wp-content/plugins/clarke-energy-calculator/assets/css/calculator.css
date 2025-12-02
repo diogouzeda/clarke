@@ -4,62 +4,62 @@
  */
 
 :root {
-    --clarke-primary: #00bf6a;
-    --clarke-primary-dark: #005931;
-    --clarke-white: #ffffff;
-    --clarke-dark: #222222;
-    --clarke-gray-light: #f5f5f5;
-    --clarke-gray: #e0e0e0;
-    --clarke-gray-dark: #666666;
-    --clarke-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    --clarke-transition: all 0.3s ease;
+    --clarke-primary: #00bf6a !important;
+    --clarke-primary-dark: #005931 !important;
+    --clarke-white: #ffffff !important;
+    --clarke-dark: #222222 !important;
+    --clarke-gray-light: #f5f5f5 !important;
+    --clarke-gray: #e0e0e0 !important;
+    --clarke-gray-dark: #666666 !important;
+    --clarke-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    --clarke-transition: all 0.3s ease !important;
 }
 
 /* Container */
 .clarke-calculator {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: var(--clarke-white);
-    border-radius: 16px;
-    box-shadow: var(--clarke-shadow);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    background: var(--clarke-white) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--clarke-shadow) !important;
 }
 
 /* Progress Bar */
 .clarke-progress {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 .clarke-progress-bar {
-    height: 6px;
-    background: var(--clarke-gray);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 10px;
+    height: 6px !important;
+    background: var(--clarke-gray) !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+    margin-bottom: 10px !important;
 }
 
 .clarke-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--clarke-primary), var(--clarke-primary-dark));
-    border-radius: 3px;
-    transition: width 0.4s ease;
+    height: 100% !important;
+    background: linear-gradient(90deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    border-radius: 3px !important;
+    transition: width 0.4s ease !important;
 }
 
 .clarke-progress-text {
-    font-size: 14px;
-    color: var(--clarke-gray-dark);
-    text-align: right;
+    font-size: 14px !important;
+    color: var(--clarke-gray-dark) !important;
+    text-align: right !important;
 }
 
 /* Steps */
 .clarke-step {
-    display: none;
-    animation: fadeIn 0.4s ease;
+    display: none !important;
+    animation: fadeIn 0.4s ease !important;
 }
 
 .clarke-step.active {
-    display: block;
+    display: block !important;
 }
 
 @keyframes fadeIn {
@@ -75,277 +75,277 @@
 
 /* Question */
 .clarke-question {
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
 }
 
 .clarke-question h3 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--clarke-dark);
-    margin-bottom: 8px;
-    line-height: 1.3;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 8px !important;
+    line-height: 1.3 !important;
 }
 
 .clarke-question p {
-    font-size: 16px;
-    color: var(--clarke-gray-dark);
-    margin-bottom: 0;
+    font-size: 16px !important;
+    color: var(--clarke-gray-dark) !important;
+    margin-bottom: 0 !important;
 }
 
 /* Options */
 .clarke-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
 }
 
 .clarke-option {
-    position: relative;
-    cursor: pointer;
+    position: relative !important;
+    cursor: pointer !important;
 }
 
 .clarke-option input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
+    position: absolute !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
 }
 
 .clarke-option-label {
-    display: flex;
-    align-items: center;
-    padding: 16px 20px;
-    background: var(--clarke-gray-light);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    transition: var(--clarke-transition);
-    font-size: 16px;
-    color: var(--clarke-dark);
+    display: flex !important;
+    align-items: center !important;
+    padding: 16px 20px !important;
+    background: var(--clarke-gray-light) !important;
+    border: 2px solid transparent !important;
+    border-radius: 12px !important;
+    transition: var(--clarke-transition) !important;
+    font-size: 16px !important;
+    color: var(--clarke-dark) !important;
 }
 
 .clarke-option-label:hover {
-    background: #e8f9f0;
-    border-color: var(--clarke-primary);
+    background: #e8f9f0 !important;
+    border-color: var(--clarke-primary) !important;
 }
 
 .clarke-option input:checked + .clarke-option-label {
-    background: #e8f9f0;
-    border-color: var(--clarke-primary);
-    color: var(--clarke-primary-dark);
-    font-weight: 500;
+    background: #e8f9f0 !important;
+    border-color: var(--clarke-primary) !important;
+    color: var(--clarke-primary-dark) !important;
+    font-weight: 500 !important;
 }
 
 .clarke-option-check {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--clarke-gray);
-    border-radius: 50%;
-    margin-right: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--clarke-transition);
-    flex-shrink: 0;
+    width: 24px !important;
+    height: 24px !important;
+    border: 2px solid var(--clarke-gray) !important;
+    border-radius: 50% !important;
+    margin-right: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: var(--clarke-transition) !important;
+    flex-shrink: 0 !important;
 }
 
 .clarke-option input:checked + .clarke-option-label .clarke-option-check {
-    background: var(--clarke-primary);
-    border-color: var(--clarke-primary);
+    background: var(--clarke-primary) !important;
+    border-color: var(--clarke-primary) !important;
 }
 
 .clarke-option input:checked + .clarke-option-label .clarke-option-check::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--clarke-white);
-    border-radius: 50%;
+    content: '' !important;
+    width: 8px !important;
+    height: 8px !important;
+    background: var(--clarke-white) !important;
+    border-radius: 50% !important;
 }
 
 /* Grid Options (for some questions) */
 .clarke-options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
 }
 
 @media (max-width: 600px) {
     .clarke-options-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 }
 
 /* Navigation Buttons */
 .clarke-navigation {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 1px solid var(--clarke-gray);
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    margin-top: 40px !important;
+    padding-top: 30px !important;
+    border-top: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-btn {
-    padding: 14px 32px;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--clarke-transition);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    padding: 14px 32px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: var(--clarke-transition) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
 
 .clarke-btn-back {
-    background: transparent;
-    color: var(--clarke-gray-dark);
-    border: 2px solid var(--clarke-gray);
+    background: transparent !important;
+    color: var(--clarke-gray-dark) !important;
+    border: 2px solid var(--clarke-gray) !important;
 }
 
 .clarke-btn-back:hover {
-    background: var(--clarke-gray-light);
-    border-color: var(--clarke-gray-dark);
+    background: var(--clarke-gray-light) !important;
+    border-color: var(--clarke-gray-dark) !important;
 }
 
 .clarke-btn-next,
 .clarke-btn-submit {
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark));
-    color: var(--clarke-white);
-    margin-left: auto;
+    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    color: var(--clarke-white) !important;
+    margin-left: auto !important;
 }
 
 .clarke-btn-next:hover,
 .clarke-btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4) !important;
 }
 
 .clarke-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
 }
 
 .clarke-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 /* Residential Message */
 .clarke-residential-message {
-    display: none;
-    text-align: center;
-    padding: 40px 20px;
-    animation: fadeIn 0.4s ease;
+    display: none !important;
+    text-align: center !important;
+    padding: 40px 20px !important;
+    animation: fadeIn 0.4s ease !important;
 }
 
 .clarke-residential-message.show {
-    display: block;
+    display: block !important;
 }
 
 .clarke-residential-icon {
-    width: 80px;
-    height: 80px;
-    background: #fff3cd;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
+    width: 80px !important;
+    height: 80px !important;
+    background: #fff3cd !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 24px !important;
 }
 
 .clarke-residential-icon svg {
-    width: 40px;
-    height: 40px;
-    color: #856404;
+    width: 40px !important;
+    height: 40px !important;
+    color: #856404 !important;
 }
 
 .clarke-residential-message h3 {
-    font-size: 22px;
-    color: var(--clarke-dark);
-    margin-bottom: 16px;
+    font-size: 22px !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 16px !important;
 }
 
 .clarke-residential-message p {
-    font-size: 16px;
-    color: var(--clarke-gray-dark);
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.6;
+    font-size: 16px !important;
+    color: var(--clarke-gray-dark) !important;
+    max-width: 500px !important;
+    margin: 0 auto !important;
+    line-height: 1.6 !important;
 }
 
 /* Email Step */
 .clarke-email-step {
-    text-align: center;
+    text-align: center !important;
 }
 
 .clarke-email-step .clarke-question h3 {
-    margin-bottom: 16px;
+    margin-bottom: 16px !important;
 }
 
 .clarke-email-form {
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 400px !important;
+    margin: 0 auto !important;
 }
 
 .clarke-input-group {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
 }
 
 .clarke-input {
-    width: 100%;
-    padding: 16px 20px;
-    font-size: 16px;
-    border: 2px solid var(--clarke-gray);
-    border-radius: 12px;
-    transition: var(--clarke-transition);
-    box-sizing: border-box;
+    width: 100% !important;
+    padding: 16px 20px !important;
+    font-size: 16px !important;
+    border: 2px solid var(--clarke-gray) !important;
+    border-radius: 12px !important;
+    transition: var(--clarke-transition) !important;
+    box-sizing: border-box !important;
 }
 
 .clarke-input:focus {
-    outline: none;
-    border-color: var(--clarke-primary);
-    box-shadow: 0 0 0 4px rgba(0, 191, 106, 0.1);
+    outline: none !important;
+    border-color: var(--clarke-primary) !important;
+    box-shadow: 0 0 0 4px rgba(0, 191, 106, 0.1) !important;
 }
 
 .clarke-input::placeholder {
-    color: var(--clarke-gray-dark);
+    color: var(--clarke-gray-dark) !important;
 }
 
 .clarke-privacy-text {
-    font-size: 13px;
-    color: var(--clarke-gray-dark);
-    margin-top: 16px;
+    font-size: 13px !important;
+    color: var(--clarke-gray-dark) !important;
+    margin-top: 16px !important;
 }
 
 .clarke-privacy-text a {
-    color: var(--clarke-primary);
-    text-decoration: none;
+    color: var(--clarke-primary) !important;
+    text-decoration: none !important;
 }
 
 .clarke-privacy-text a:hover {
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 /* Loading */
 .clarke-loading {
-    display: none;
-    text-align: center;
-    padding: 60px 20px;
+    display: none !important;
+    text-align: center !important;
+    padding: 60px 20px !important;
 }
 
 .clarke-loading.show {
-    display: block;
+    display: block !important;
 }
 
 .clarke-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid var(--clarke-gray);
-    border-top-color: var(--clarke-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px;
+    width: 50px !important;
+    height: 50px !important;
+    border: 4px solid var(--clarke-gray) !important;
+    border-top-color: var(--clarke-primary) !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+    margin: 0 auto 20px !important;
 }
 
 @keyframes spin {
@@ -355,423 +355,423 @@
 }
 
 .clarke-loading p {
-    font-size: 18px;
-    color: var(--clarke-dark);
+    font-size: 18px !important;
+    color: var(--clarke-dark) !important;
 }
 
 /* Results */
 .clarke-results {
-    display: none;
-    animation: fadeIn 0.5s ease;
+    display: none !important;
+    animation: fadeIn 0.5s ease !important;
 }
 
 .clarke-results.show {
-    display: block;
+    display: block !important;
 }
 
 .clarke-results-header {
-    text-align: center;
-    padding: 30px 0 40px;
-    border-bottom: 1px solid var(--clarke-gray);
-    margin-bottom: 40px;
+    text-align: center !important;
+    padding: 30px 0 40px !important;
+    border-bottom: 1px solid var(--clarke-gray) !important;
+    margin-bottom: 40px !important;
 }
 
 .clarke-badge {
-    display: inline-block;
-    padding: 8px 20px;
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark));
-    color: var(--clarke-white);
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
+    display: inline-block !important;
+    padding: 8px 20px !important;
+    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    color: var(--clarke-white) !important;
+    border-radius: 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 16px !important;
 }
 
 .clarke-results-header h2 {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--clarke-dark);
-    margin-bottom: 8px;
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 8px !important;
 }
 
 .clarke-strategy-name {
-    font-size: 28px;
-    color: var(--clarke-primary);
-    font-weight: 700;
-    margin-bottom: 20px;
+    font-size: 28px !important;
+    color: var(--clarke-primary) !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
 }
 
 .clarke-stars {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 4px !important;
 }
 
 .clarke-star {
-    width: 28px;
-    height: 28px;
-    color: #ffc107;
+    width: 28px !important;
+    height: 28px !important;
+    color: #ffc107 !important;
 }
 
 .clarke-star.empty {
-    color: var(--clarke-gray);
+    color: var(--clarke-gray) !important;
 }
 
 /* Economy Cards */
 .clarke-economy-section {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 .clarke-economy-section h3 {
-    font-size: 20px;
-    color: var(--clarke-dark);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 20px !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .clarke-economy-section h3 svg {
-    width: 24px;
-    height: 24px;
-    color: var(--clarke-primary);
+    width: 24px !important;
+    height: 24px !important;
+    color: var(--clarke-primary) !important;
 }
 
 .clarke-economy-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
 }
 
 @media (max-width: 700px) {
     .clarke-economy-cards {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 }
 
 .clarke-economy-card {
-    background: var(--clarke-gray-light);
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
+    background: var(--clarke-gray-light) !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    text-align: center !important;
 }
 
 .clarke-economy-card.highlight {
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark));
-    color: var(--clarke-white);
+    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    color: var(--clarke-white) !important;
 }
 
 .clarke-economy-label {
-    font-size: 14px;
-    margin-bottom: 8px;
-    opacity: 0.8;
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+    opacity: 0.8 !important;
 }
 
 .clarke-economy-value {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 24px !important;
+    font-weight: 700 !important;
 }
 
 .clarke-economy-card.highlight .clarke-economy-value {
-    font-size: 28px;
+    font-size: 28px !important;
 }
 
 /* Reasons */
 .clarke-reasons {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 .clarke-reasons h3 {
-    font-size: 20px;
-    color: var(--clarke-dark);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 20px !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .clarke-reasons h3 svg {
-    width: 24px;
-    height: 24px;
-    color: var(--clarke-primary);
+    width: 24px !important;
+    height: 24px !important;
+    color: var(--clarke-primary) !important;
 }
 
 .clarke-reasons-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .clarke-reasons-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--clarke-gray);
-    font-size: 16px;
-    color: var(--clarke-dark);
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 16px 0 !important;
+    border-bottom: 1px solid var(--clarke-gray) !important;
+    font-size: 16px !important;
+    color: var(--clarke-dark) !important;
 }
 
 .clarke-reasons-list li:last-child {
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .clarke-reasons-list li svg {
-    width: 24px;
-    height: 24px;
-    color: var(--clarke-primary);
-    flex-shrink: 0;
-    margin-top: 2px;
+    width: 24px !important;
+    height: 24px !important;
+    color: var(--clarke-primary) !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
 }
 
 /* Comparison Table */
 .clarke-comparison {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 .clarke-comparison h3 {
-    font-size: 20px;
-    color: var(--clarke-dark);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 20px !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .clarke-comparison h3 svg {
-    width: 24px;
-    height: 24px;
-    color: var(--clarke-primary);
+    width: 24px !important;
+    height: 24px !important;
+    color: var(--clarke-primary) !important;
 }
 
 .clarke-table-wrapper {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid var(--clarke-gray);
+    overflow-x: auto !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 14px !important;
 }
 
 .clarke-table th,
 .clarke-table td {
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--clarke-gray);
+    padding: 14px 16px !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-table th {
-    background: var(--clarke-gray-light);
-    font-weight: 600;
-    color: var(--clarke-dark);
-    white-space: nowrap;
+    background: var(--clarke-gray-light) !important;
+    font-weight: 600 !important;
+    color: var(--clarke-dark) !important;
+    white-space: nowrap !important;
 }
 
 .clarke-table tbody tr:hover {
-    background: #f9f9f9;
+    background: #f9f9f9 !important;
 }
 
 .clarke-table tbody tr.winner {
-    background: #e8f9f0;
+    background: #e8f9f0 !important;
 }
 
 .clarke-table tbody tr.winner td {
-    font-weight: 500;
+    font-weight: 500 !important;
 }
 
 .clarke-table tbody tr.disqualified {
-    opacity: 0.5;
+    opacity: 0.5 !important;
 }
 
 .clarke-table .strategy-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
 
 .clarke-table .winner-badge {
-    background: var(--clarke-primary);
-    color: var(--clarke-white);
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-weight: 600;
+    background: var(--clarke-primary) !important;
+    color: var(--clarke-white) !important;
+    font-size: 11px !important;
+    padding: 3px 8px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
 }
 
 .clarke-mini-stars {
-    display: flex;
-    gap: 2px;
+    display: flex !important;
+    gap: 2px !important;
 }
 
 .clarke-mini-star {
-    width: 14px;
-    height: 14px;
-    color: #ffc107;
+    width: 14px !important;
+    height: 14px !important;
+    color: #ffc107 !important;
 }
 
 .clarke-mini-star.empty {
-    color: var(--clarke-gray);
+    color: var(--clarke-gray) !important;
 }
 
 /* Next Steps */
 .clarke-next-steps {
-    background: var(--clarke-gray-light);
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 30px;
+    background: var(--clarke-gray-light) !important;
+    border-radius: 12px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
 }
 
 .clarke-next-steps h3 {
-    font-size: 20px;
-    color: var(--clarke-dark);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 20px !important;
+    color: var(--clarke-dark) !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .clarke-next-steps h3 svg {
-    width: 24px;
-    height: 24px;
-    color: var(--clarke-primary);
+    width: 24px !important;
+    height: 24px !important;
+    color: var(--clarke-primary) !important;
 }
 
 .clarke-next-steps p {
-    font-size: 16px;
-    color: var(--clarke-gray-dark);
-    margin-bottom: 24px;
-    line-height: 1.6;
+    font-size: 16px !important;
+    color: var(--clarke-gray-dark) !important;
+    margin-bottom: 24px !important;
+    line-height: 1.6 !important;
 }
 
 .clarke-cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 32px;
-    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark));
-    color: var(--clarke-white);
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: var(--clarke-transition);
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 16px 32px !important;
+    background: linear-gradient(135deg, var(--clarke-primary), var(--clarke-primary-dark)) !important;
+    color: var(--clarke-white) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: var(--clarke-transition) !important;
 }
 
 .clarke-cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4);
-    color: var(--clarke-white);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 191, 106, 0.4) !important;
+    color: var(--clarke-white) !important;
 }
 
 .clarke-cta-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 /* Disclaimer */
 .clarke-disclaimer {
-    font-size: 13px;
-    color: var(--clarke-gray-dark);
-    text-align: center;
-    padding: 20px;
-    background: var(--clarke-gray-light);
-    border-radius: 8px;
-    line-height: 1.6;
+    font-size: 13px !important;
+    color: var(--clarke-gray-dark) !important;
+    text-align: center !important;
+    padding: 20px !important;
+    background: var(--clarke-gray-light) !important;
+    border-radius: 8px !important;
+    line-height: 1.6 !important;
 }
 
 /* Restart Button */
 .clarke-restart {
-    text-align: center;
-    margin-top: 30px;
+    text-align: center !important;
+    margin-top: 30px !important;
 }
 
 .clarke-restart-btn {
-    background: transparent;
-    border: 2px solid var(--clarke-gray);
-    color: var(--clarke-gray-dark);
-    padding: 12px 24px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--clarke-transition);
+    background: transparent !important;
+    border: 2px solid var(--clarke-gray) !important;
+    color: var(--clarke-gray-dark) !important;
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: var(--clarke-transition) !important;
 }
 
 .clarke-restart-btn:hover {
-    border-color: var(--clarke-primary);
-    color: var(--clarke-primary);
+    border-color: var(--clarke-primary) !important;
+    color: var(--clarke-primary) !important;
 }
 
 /* Footer */
 .clarke-footer {
-    text-align: center;
-    padding-top: 20px;
-    margin-top: 20px;
-    border-top: 1px solid var(--clarke-gray);
+    text-align: center !important;
+    padding-top: 20px !important;
+    margin-top: 20px !important;
+    border-top: 1px solid var(--clarke-gray) !important;
 }
 
 .clarke-footer a {
-    font-size: 13px;
-    color: var(--clarke-gray-dark);
-    text-decoration: none;
+    font-size: 13px !important;
+    color: var(--clarke-gray-dark) !important;
+    text-decoration: none !important;
 }
 
 .clarke-footer a:hover {
-    color: var(--clarke-primary);
+    color: var(--clarke-primary) !important;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
     .clarke-calculator {
-        padding: 16px;
-        border-radius: 12px;
+        padding: 16px !important;
+        border-radius: 12px !important;
     }
 
     .clarke-question h3 {
-        font-size: 20px;
+        font-size: 20px !important;
     }
 
     .clarke-option-label {
-        padding: 14px 16px;
-        font-size: 15px;
+        padding: 14px 16px !important;
+        font-size: 15px !important;
     }
 
     .clarke-btn {
-        padding: 12px 24px;
-        font-size: 15px;
+        padding: 12px 24px !important;
+        font-size: 15px !important;
     }
 
     .clarke-navigation {
-        flex-direction: column-reverse;
+        flex-direction: column-reverse !important;
     }
 
     .clarke-btn-back,
     .clarke-btn-next {
-        width: 100%;
-        justify-content: center;
-        margin-left: 0;
+        width: 100% !important;
+        justify-content: center !important;
+        margin-left: 0 !important;
     }
 
     .clarke-results-header h2 {
-        font-size: 24px;
+        font-size: 24px !important;
     }
 
     .clarke-strategy-name {
-        font-size: 22px;
+        font-size: 22px !important;
     }
 
     .clarke-economy-value {
-        font-size: 20px;
+        font-size: 20px !important;
     }
 
     .clarke-economy-card.highlight .clarke-economy-value {
-        font-size: 24px;
+        font-size: 24px !important;
     }
 }
