@@ -1,0 +1,96 @@
+# WordPress Core
+# Ignore WordPress core files, as they can be reinstalled
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+
+# Configuration
+wp-config.php
+
+# Uploads
+/wp-content/uploads/
+
+# Cache and backup files
+/wp-content/cache/
+/wp-content/backup*/
+/wp-content/upgrade/
+/wp-content/backups/
+/wp-content/updraft/
+
+# Plugins - uncomment if you don't want to track plugins
+# /wp-content/plugins/
+
+# Themes - keep only your custom theme
+# /wp-content/themes/twenty*/
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+*.tmproj
+*.tmproject
+.tm_properties
+nbproject/
+
+# Logs
+*.log
+/wp-content/debug.log
+error_log
+access_log
+
+# Node modules (if using build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Build directories
+/dist/
+/build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Composer
+/vendor/
+
+# OS generated files
+*.bak
+*.tmp
+*.temp
+
+# Security - never commit these
+*.sql
+*.sql.gz
+*.tar
+*.tar.gz
+*.zip
+/backups/
+
+# Advanced Custom Fields Pro
+/wp-content/plugins/advanced-custom-fields-pro/
+
+# WP-CLI
+wp-cli.local.yml
