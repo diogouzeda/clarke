@@ -225,7 +225,7 @@ if (!defined('ABSPATH')) {
             <!-- Custom Value Input (hidden by default) -->
             <div class="clarke-custom-value-container" id="expense-custom-container" style="display: none;">
                 <div class="clarke-custom-value-header">
-                    <span class="clarke-custom-value-label">Digite o valor exato:</span>
+                    <span class="clarke-custom-value-label">Digite o valor médio de sua conta de luz</span>
                     <button type="button" class="clarke-custom-value-back" id="expense-back-to-slider">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         Voltar ao slider

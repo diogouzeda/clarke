@@ -81,7 +81,7 @@
             }
 
             // Slider input event
-            $slider.on('input', function() {
+            $slider.on('input change', function() {
                 const value = parseInt($(this).val());
                 updateSlider(value);
                 
@@ -91,6 +91,12 @@
                         self.showCustomExpenseInput();
                     }, 300);
                 }
+            });
+
+            // Also enable on click/touch
+            $slider.on('mousedown touchstart', function() {
+                const value = parseInt($(this).val());
+                updateSlider(value);
             });
 
             // Back to slider button
@@ -191,9 +197,17 @@
             const currentStepNum = parseInt($currentStep.data('step'));
 
             // Validate current step
-            const $selectedOption = $currentStep.find('input[type="radio"]:checked');
-            if ($selectedOption.length === 0 && currentStepNum < 15) {
-                return;
+            // Step 3 uses range slider, not radio buttons
+            if (currentStepNum === 3) {
+                const expenseValue = $('#monthly-expense-value').val();
+                if (!expenseValue || expenseValue === '') {
+                    return;
+                }
+            } else if (currentStepNum < 15) {
+                const $selectedOption = $currentStep.find('input[type="radio"]:checked');
+                if ($selectedOption.length === 0) {
+                    return;
+                }
             }
 
             // Move to next step

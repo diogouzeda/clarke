@@ -400,8 +400,8 @@
 
 .clarke-custom-input-prefix {
     position: absolute !important;
-    left: 20px !important;
-    font-size: 24px !important;
+    left: 16px !important;
+    font-size: 16px !important;
     font-weight: 600 !important;
     color: var(--clarke-gray-dark) !important;
     pointer-events: none !important;
@@ -410,13 +410,13 @@
 
 .clarke-custom-input {
     width: 100% !important;
-    padding: 20px 20px 20px 60px !important;
-    font-size: 32px !important;
-    font-weight: 700 !important;
+    padding: 14px 16px 14px 48px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     color: var(--clarke-dark) !important;
     background: var(--clarke-white) !important;
-    border: 2px solid var(--clarke-gray) !important;
-    border-radius: var(--clarke-radius) !important;
+    border: 1px solid var(--clarke-gray) !important;
+    border-radius: var(--clarke-radius-sm) !important;
     outline: none !important;
     transition: var(--clarke-transition) !important;
     text-align: left !important;
@@ -424,7 +424,7 @@
 
 .clarke-custom-input:focus {
     border-color: var(--clarke-primary) !important;
-    box-shadow: 0 0 0 4px rgba(0, 191, 106, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(0, 191, 106, 0.1) !important;
 }
 
 .clarke-custom-input::placeholder {
