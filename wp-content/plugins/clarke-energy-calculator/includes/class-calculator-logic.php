@@ -163,6 +163,23 @@ class Clarke_Calculator_Logic {
     );
 
     /**
+     * Convert numeric expense value to category
+     */
+    private function convert_expense_to_category($value) {
+        $value = intval($value);
+        
+        if ($value <= 5000) {
+            return 'ate_5000';
+        } elseif ($value <= 15000) {
+            return '5000_15000';
+        } elseif ($value <= 50000) {
+            return '15000_50000';
+        } else {
+            return 'acima_50000';
+        }
+    }
+
+    /**
      * Calculate scores for all strategies
      */
     public function calculate_scores($answers) {
@@ -176,6 +193,11 @@ class Clarke_Calculator_Logic {
             'gd_compartilhada' => 0,
             'eficiencia' => 0,
         );
+
+        // Convert numeric monthly_expense to category if it's a number
+        if (isset($answers['monthly_expense']) && is_numeric($answers['monthly_expense'])) {
+            $answers['monthly_expense'] = $this->convert_expense_to_category($answers['monthly_expense']);
+        }
 
         // Calculate base scores
         foreach ($answers as $question => $answer) {

@@ -17,6 +17,7 @@
         init: function() {
             this.bindEvents();
             this.updateProgress();
+            this.initRangeSlider();
         },
 
         // Bind event listeners
@@ -49,6 +50,113 @@
                 const isValid = self.isValidEmail($(this).val());
                 $('.clarke-btn-submit').prop('disabled', !isValid);
             });
+        },
+
+        // Initialize Range Slider for expense
+        initRangeSlider: function() {
+            const self = this;
+            const $slider = $('#expense-slider');
+            const $display = $('#expense-display');
+            const $fill = $('#expense-fill');
+            const $rangeContainer = $('#expense-range-container');
+            const $customContainer = $('#expense-custom-container');
+            const $customInput = $('#expense-custom-input');
+            const $hiddenInput = $('#monthly-expense-value');
+            const $backToSlider = $('#expense-back-to-slider');
+            const $step3 = $('.clarke-step[data-step="3"]');
+
+            // Update slider display and fill
+            function updateSlider(value) {
+                const min = parseInt($slider.attr('min'));
+                const max = parseInt($slider.attr('max'));
+                const percentage = ((value - min) / (max - min)) * 100;
+                
+                $fill.css('width', percentage + '%');
+                $display.text(self.formatCurrency(value));
+                $hiddenInput.val(value);
+                self.answers['monthly_expense'] = value;
+                
+                // Enable next button
+                $step3.find('.clarke-btn-next').prop('disabled', false);
+            }
+
+            // Slider input event
+            $slider.on('input', function() {
+                const value = parseInt($(this).val());
+                updateSlider(value);
+                
+                // If reached max (50000), show custom input
+                if (value >= 50000) {
+                    setTimeout(function() {
+                        self.showCustomExpenseInput();
+                    }, 300);
+                }
+            });
+
+            // Back to slider button
+            $backToSlider.on('click', function() {
+                self.showExpenseSlider();
+            });
+
+            // Custom input with currency mask
+            $customInput.on('input', function() {
+                let value = $(this).val();
+                
+                // Remove non-numeric characters
+                value = value.replace(/\D/g, '');
+                
+                // Convert to number and format
+                if (value) {
+                    const numValue = parseInt(value);
+                    $(this).val(self.formatCurrencyInput(numValue));
+                    $hiddenInput.val(numValue);
+                    self.answers['monthly_expense'] = numValue;
+                    $step3.find('.clarke-btn-next').prop('disabled', false);
+                } else {
+                    $hiddenInput.val('');
+                    $step3.find('.clarke-btn-next').prop('disabled', true);
+                }
+            });
+
+            // Focus handling for custom input
+            $customInput.on('focus', function() {
+                if ($(this).val() === '') {
+                    $(this).val('');
+                }
+            });
+
+            // Initialize with default value
+            updateSlider(1000);
+            $step3.find('.clarke-btn-next').prop('disabled', true); // Start disabled until user interacts
+        },
+
+        // Show custom expense input
+        showCustomExpenseInput: function() {
+            $('#expense-range-container').slideUp(300);
+            $('#expense-custom-container').slideDown(300, function() {
+                $('#expense-custom-input').focus();
+            });
+            // Pre-fill with 50000
+            $('#expense-custom-input').val(this.formatCurrencyInput(50000));
+            $('#monthly-expense-value').val(50000);
+            this.answers['monthly_expense'] = 50000;
+        },
+
+        // Show expense slider
+        showExpenseSlider: function() {
+            $('#expense-custom-container').slideUp(300);
+            $('#expense-range-container').slideDown(300);
+            $('#expense-slider').val(25000).trigger('input');
+        },
+
+        // Format currency for display (1.000)
+        formatCurrency: function(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        },
+
+        // Format currency for input (1.000,00)
+        formatCurrencyInput: function(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',00';
         },
 
         // Handle option selection

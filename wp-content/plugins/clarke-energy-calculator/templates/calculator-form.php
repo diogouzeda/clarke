@@ -197,44 +197,53 @@ if (!defined('ABSPATH')) {
                 <h3>Qual seu gasto médio mensal com energia?</h3>
                 <p>Valor aproximado da sua conta de luz</p>
             </div>
-            <div class="clarke-options">
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_expense" value="ate_5000" required>
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </span>
-                        <span class="clarke-option-text">Até R$ 5.000</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_expense" value="5000_15000">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
-                        </span>
-                        <span class="clarke-option-text">R$ 5.000 a R$ 15.000</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_expense" value="15000_50000">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><circle cx="12" cy="12" r="10"/></svg>
-                        </span>
-                        <span class="clarke-option-text">R$ 15.000 a R$ 50.000</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_expense" value="acima_50000">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
-                        </span>
-                        <span class="clarke-option-text">Acima de R$ 50.000</span>
-                    </span>
-                </label>
+            
+            <!-- Range Slider Container -->
+            <div class="clarke-range-container" id="expense-range-container">
+                <div class="clarke-range-value-display">
+                    <span class="clarke-range-currency">R$</span>
+                    <span class="clarke-range-amount" id="expense-display">1.000</span>
+                </div>
+                <div class="clarke-range-wrapper">
+                    <input type="range" 
+                           id="expense-slider" 
+                           class="clarke-range-slider" 
+                           min="1000" 
+                           max="50000" 
+                           step="1000" 
+                           value="1000">
+                    <div class="clarke-range-track">
+                        <div class="clarke-range-fill" id="expense-fill"></div>
+                    </div>
+                </div>
+                <div class="clarke-range-labels">
+                    <span>R$ 1.000</span>
+                    <span>R$ 50.000+</span>
+                </div>
             </div>
+            
+            <!-- Custom Value Input (hidden by default) -->
+            <div class="clarke-custom-value-container" id="expense-custom-container" style="display: none;">
+                <div class="clarke-custom-value-header">
+                    <span class="clarke-custom-value-label">Digite o valor exato:</span>
+                    <button type="button" class="clarke-custom-value-back" id="expense-back-to-slider">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        Voltar ao slider
+                    </button>
+                </div>
+                <div class="clarke-custom-input-wrapper">
+                    <span class="clarke-custom-input-prefix">R$</span>
+                    <input type="text" 
+                           id="expense-custom-input" 
+                           class="clarke-custom-input" 
+                           placeholder="0,00"
+                           inputmode="numeric">
+                </div>
+            </div>
+            
+            <!-- Hidden input to store the actual value -->
+            <input type="hidden" name="monthly_expense" id="monthly-expense-value" value="">
+            
             <div class="clarke-navigation">
                 <button type="button" class="clarke-btn clarke-btn-back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
