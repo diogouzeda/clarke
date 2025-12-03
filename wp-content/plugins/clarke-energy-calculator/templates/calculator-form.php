@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
         <div class="clarke-progress-steps">
-            <span class="clarke-progress-text">Etapa <span class="current-step">1</span> de <span class="total-steps">15</span></span>
+            <span class="clarke-progress-text">Etapa <span class="current-step">1</span> de <span class="total-steps">14</span></span>
         </div>
     </div>
 
@@ -661,64 +661,8 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
 
-        <!-- Step 12: Consumo Mensal -->
+        <!-- Step 12: Previsão de Crescimento -->
         <div class="clarke-step" data-step="12">
-            <div class="clarke-question">
-                <h3>Qual é o consumo mensal de energia da sua empresa (kWh)?</h3>
-                <p>Você pode encontrar essa informação na sua conta de luz</p>
-            </div>
-            <div class="clarke-options">
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_consumption" value="ate_30000" required>
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                        </span>
-                        <span class="clarke-option-text">Até 30.000 kWh/mês</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_consumption" value="30000_100000">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
-                        </span>
-                        <span class="clarke-option-text">30.000 a 100.000 kWh/mês</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_consumption" value="acima_100000">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
-                        </span>
-                        <span class="clarke-option-text">Acima de 100.000 kWh/mês</span>
-                    </span>
-                </label>
-                <label class="clarke-option">
-                    <input type="radio" name="monthly_consumption" value="nao_sei">
-                    <span class="clarke-option-label">
-                        <span class="clarke-option-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-                        </span>
-                        <span class="clarke-option-text">Não sei dizer</span>
-                    </span>
-                </label>
-            </div>
-            <div class="clarke-navigation">
-                <button type="button" class="clarke-btn clarke-btn-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                    Voltar
-                </button>
-                <button type="button" class="clarke-btn clarke-btn-next" disabled>
-                    Continuar
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Step 13: Previsão de Crescimento -->
-        <div class="clarke-step" data-step="13">
             <div class="clarke-question">
                 <h3>Qual é a previsão de crescimento da sua empresa nos próximos 5 anos?</h3>
             </div>
@@ -772,8 +716,8 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
 
-        <!-- Step 14: Acesso a Biomassa -->
-        <div class="clarke-step" data-step="14">
+        <!-- Step 13: Acesso a Biomassa -->
+        <div class="clarke-step" data-step="13">
             <div class="clarke-question">
                 <h3>Sua empresa tem acesso a resíduos orgânicos ou biomassa?</h3>
                 <p>Resíduos agrícolas, madeira, bagaço de cana, etc.</p>
@@ -828,15 +772,19 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
 
-        <!-- Step 15: Email -->
-        <div class="clarke-step clarke-email-step" data-step="15">
+        <!-- Step 14: Nome e Email -->
+        <div class="clarke-step clarke-email-step" data-step="14">
             <div class="clarke-question">
-                <h3>Quase lá! Informe seu email para ver o resultado</h3>
+                <h3>Quase lá! Informe seus dados para ver o resultado</h3>
                 <p>Enviaremos uma cópia da análise para você</p>
             </div>
             <div class="clarke-email-form">
                 <div class="clarke-input-group">
+                    <input type="text" class="clarke-input" id="lead-name" name="name" placeholder="Seu nome" required>
+                </div>
+                <div class="clarke-input-group">
                     <input type="email" class="clarke-input" id="lead-email" name="email" placeholder="seu@email.com" required>
+                    <span class="clarke-email-error" id="email-error" style="display: none; color: #e74c3c; font-size: 12px; margin-top: 4px;">Por favor, insira um e-mail válido</span>
                 </div>
                 <button type="submit" class="clarke-btn clarke-btn-submit" style="width: 100%; justify-content: center;">
                     Ver meu resultado

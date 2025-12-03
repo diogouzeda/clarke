@@ -27,6 +27,7 @@ class Clarke_HubSpot_Integration {
      */
     public static function get_calculator_fields() {
         return array(
+            'name' => 'Nome',
             'email' => 'Email',
             'company_type' => 'Tipo de Empresa',
             'company_size' => 'Porte da Empresa',
@@ -50,6 +51,7 @@ class Clarke_HubSpot_Integration {
      */
     public static function get_default_mapping() {
         return array(
+            'name' => 'firstname',
             'email' => 'email',
             'company_type' => '',
             'company_size' => '',

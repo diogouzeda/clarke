@@ -19,6 +19,9 @@ class Clarke_Calculator_Ajax {
         
         add_action('wp_ajax_clarke_save_lead', array($this, 'save_lead'));
         add_action('wp_ajax_nopriv_clarke_save_lead', array($this, 'save_lead'));
+        
+        add_action('wp_ajax_clarke_request_analysis', array($this, 'request_analysis'));
+        add_action('wp_ajax_nopriv_clarke_request_analysis', array($this, 'request_analysis'));
     }
 
     /**
@@ -53,6 +56,13 @@ class Clarke_Calculator_Ajax {
         // Verify nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'clarke_calculator_nonce')) {
             wp_send_json_error(array('message' => 'Erro de segurança. Recarregue a página.'));
+        }
+
+        // Get and validate name
+        $name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+        
+        if (empty($name)) {
+            wp_send_json_error(array('message' => 'Por favor, informe seu nome.'));
         }
 
         // Get and validate email
@@ -91,6 +101,7 @@ class Clarke_Calculator_Ajax {
         $table_name = $wpdb->prefix . 'clarke_calculator_leads';
         
         $lead_data = array(
+            'name' => $name,
             'email' => $email,
             'company_type' => $company_type,
             'company_size' => $company_size,
@@ -115,7 +126,7 @@ class Clarke_Calculator_Ajax {
         $result = $wpdb->insert(
             $table_name,
             $lead_data,
-            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
+            array('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
         );
 
         if ($result === false) {
@@ -268,5 +279,104 @@ class Clarke_Calculator_Ajax {
         $message .= "Data: " . current_time('d/m/Y H:i') . "\n";
 
         wp_mail($admin_email, $subject, $message);
+    }
+
+    /**
+     * Handle analysis request for ACL strategies
+     */
+    public function request_analysis() {
+        global $wpdb;
+
+        // Verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'clarke_calculator_nonce')) {
+            wp_send_json_error(array('message' => 'Erro de segurança. Recarregue a página.'));
+        }
+
+        // Get and validate phone
+        $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+        
+        if (empty($phone)) {
+            wp_send_json_error(array('message' => 'Por favor, informe seu telefone.'));
+        }
+
+        // Get other data
+        $name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+        $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+        $strategy = isset($_POST['strategy']) ? sanitize_text_field($_POST['strategy']) : '';
+
+        // Strategy names mapping
+        $strategy_names = array(
+            'acl' => 'ACL (Mercado Livre de Energia)',
+            'acl_solar' => 'ACL + Solar (Híbrido)',
+            'biomassa_acl' => 'Biomassa + ACL',
+        );
+
+        $strategy_name = isset($strategy_names[$strategy]) ? $strategy_names[$strategy] : $strategy;
+
+        // Log the analysis request
+        Clarke_Logger::log(
+            'analysis_request',
+            "Solicitação de análise para {$strategy_name}",
+            array(
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'strategy' => $strategy,
+            )
+        );
+
+        // Send notification email to admin
+        $admin_email = get_option('admin_email');
+        $subject = "[Clarke Energia] Solicitação de Análise - {$strategy_name}";
+        
+        $message = "Nova solicitação de análise detalhada:\n\n";
+        $message .= "Nome: {$name}\n";
+        $message .= "Email: {$email}\n";
+        $message .= "Telefone: {$phone}\n";
+        $message .= "Estratégia: {$strategy_name}\n\n";
+        $message .= "Data: " . current_time('d/m/Y H:i') . "\n\n";
+        $message .= "Este lead solicitou uma análise detalhada para migração ao Mercado Livre de Energia ou estratégia híbrida.";
+
+        wp_mail($admin_email, $subject, $message);
+
+        // Update lead phone in database if exists
+        $leads_table = $wpdb->prefix . 'clarke_calculator_leads';
+        
+        if (!empty($email)) {
+            // Find the most recent lead with this email
+            $lead = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT id FROM $leads_table WHERE email = %s ORDER BY created_at DESC LIMIT 1",
+                    $email
+                )
+            );
+            
+            if ($lead) {
+                // Add phone to all_answers JSON
+                $current = $wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT all_answers FROM $leads_table WHERE id = %d",
+                        $lead->id
+                    )
+                );
+                
+                $answers = json_decode($current, true) ?: array();
+                $answers['analysis_phone'] = $phone;
+                $answers['analysis_requested'] = true;
+                $answers['analysis_requested_at'] = current_time('mysql');
+                
+                $wpdb->update(
+                    $leads_table,
+                    array('all_answers' => json_encode($answers)),
+                    array('id' => $lead->id),
+                    array('%s'),
+                    array('%d')
+                );
+            }
+        }
+
+        wp_send_json_success(array(
+            'message' => 'Solicitação enviada com sucesso!'
+        ));
     }
 }

@@ -58,10 +58,10 @@ class Clarke_Energy_Calculator {
     private function maybe_upgrade_database() {
         $db_version = get_option('clarke_calc_db_version', '1.0.0');
         
-        // If version is less than 1.1.0, run upgrade
-        if (version_compare($db_version, '1.1.0', '<')) {
+        // If version is less than 1.2.0, run upgrade
+        if (version_compare($db_version, '1.2.0', '<')) {
             $this->upgrade_database();
-            update_option('clarke_calc_db_version', '1.1.0');
+            update_option('clarke_calc_db_version', '1.2.0');
         }
     }
 
@@ -84,6 +84,7 @@ class Clarke_Energy_Calculator {
             'lead_source' => "ALTER TABLE $leads_table ADD COLUMN lead_source text DEFAULT NULL AFTER hubspot_synced_at",
             'page_url' => "ALTER TABLE $leads_table ADD COLUMN page_url text DEFAULT NULL AFTER lead_source",
             'page_title' => "ALTER TABLE $leads_table ADD COLUMN page_title varchar(255) DEFAULT NULL AFTER page_url",
+            'name' => "ALTER TABLE $leads_table ADD COLUMN name varchar(255) DEFAULT NULL AFTER id",
         );
         
         foreach ($new_columns as $column => $sql) {
@@ -180,6 +181,7 @@ function clarke_calc_activate() {
     $leads_table = $wpdb->prefix . 'clarke_calculator_leads';
     $sql_leads = "CREATE TABLE IF NOT EXISTS $leads_table (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
+        name varchar(255) DEFAULT NULL,
         email varchar(255) NOT NULL,
         company_type varchar(100) NOT NULL,
         company_size varchar(100) NOT NULL,

@@ -657,6 +657,19 @@
     font-weight: 400 !important;
 }
 
+.clarke-input.invalid {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
+}
+
+.clarke-email-error {
+    display: block !important;
+    color: #e74c3c !important;
+    font-size: 12px !important;
+    margin-top: 4px !important;
+    font-weight: 500 !important;
+}
+
 .clarke-privacy-text {
     font-size: 12px !important;
     color: var(--clarke-gray-dark) !important;
@@ -1133,3 +1146,149 @@
         font-size: 20px !important;
     }
 }
+
+/* Strategy Description Section */
+.clarke-strategy-description {
+    background: linear-gradient(135deg, rgba(0, 191, 106, 0.05), rgba(0, 191, 106, 0.02)) !important;
+    border: 1px solid rgba(0, 191, 106, 0.2) !important;
+    border-radius: var(--clarke-radius-md) !important;
+    padding: 20px 24px !important;
+    margin: 20px 0 30px 0 !important;
+}
+
+.clarke-strategy-description p {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    color: var(--clarke-text) !important;
+    margin: 0 !important;
+}
+
+/* Strategy Mini Descriptions in Table */
+.strategy-description-mini {
+    font-size: 12px !important;
+    color: var(--clarke-gray-dark) !important;
+    line-height: 1.5 !important;
+    margin-top: 6px !important;
+    display: none !important;
+}
+
+.clarke-table tr:hover .strategy-description-mini {
+    display: block !important;
+}
+
+.clarke-table tr.winner .strategy-description-mini {
+    display: block !important;
+}
+
+/* Analysis CTA Section */
+.clarke-analysis-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: var(--clarke-radius-lg) !important;
+    padding: 32px !important;
+    margin: 30px 0 !important;
+    color: white !important;
+}
+
+.clarke-analysis-cta h3 {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+    color: white !important;
+}
+
+.clarke-analysis-cta h3 svg {
+    width: 24px !important;
+    height: 24px !important;
+    stroke: white !important;
+}
+
+.clarke-analysis-cta p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 20px !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.clarke-analysis-cta p strong {
+    color: white !important;
+}
+
+.clarke-analysis-form {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-radius: var(--clarke-radius-md) !important;
+    padding: 20px !important;
+}
+
+.clarke-analysis-form-row {
+    display: flex !important;
+    gap: 12px !important;
+    align-items: center !important;
+}
+
+.clarke-analysis-form .clarke-input {
+    flex: 1 !important;
+    background: white !important;
+    border: none !important;
+    padding: 14px 18px !important;
+}
+
+.clarke-btn-analysis {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: white !important;
+    color: #667eea !important;
+    border: none !important;
+    padding: 14px 24px !important;
+    border-radius: var(--clarke-radius-sm) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: var(--clarke-transition) !important;
+    white-space: nowrap !important;
+}
+
+.clarke-btn-analysis:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-1px) !important;
+}
+
+.clarke-btn-analysis svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.clarke-analysis-note {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin: 12px 0 0 0 !important;
+    text-align: center !important;
+}
+
+/* Responsive adjustments for analysis form */
+@media (max-width: 600px) {
+    .clarke-analysis-form-row {
+        flex-direction: column !important;
+    }
+
+    .clarke-analysis-form .clarke-input {
+        width: 100% !important;
+    }
+
+    .clarke-btn-analysis {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .clarke-strategy-description {
+        padding: 16px 18px !important;
+    }
+
+    .clarke-analysis-cta {
+        padding: 24px 18px !important;
+    }
+}
+

@@ -9,7 +9,7 @@
     // Calculator state
     const Calculator = {
         currentStep: 0,
-        totalSteps: 15,
+        totalSteps: 14,
         answers: {},
         results: null,
         tracking: {},
@@ -178,9 +178,32 @@
             });
 
             // Email input validation
-            $('#lead-email').on('input', function() {
-                const isValid = self.isValidEmail($(this).val());
-                $('.clarke-btn-submit').prop('disabled', !isValid);
+            $('#lead-email').on('input blur', function() {
+                const email = $(this).val();
+                const isValid = self.isValidEmail(email);
+                const $error = $('#email-error');
+                
+                if (email && !isValid) {
+                    $error.show();
+                    $(this).addClass('invalid');
+                } else {
+                    $error.hide();
+                    $(this).removeClass('invalid');
+                }
+                
+                // Update submit button state
+                const name = $('#lead-name').val().trim();
+                $('.clarke-btn-submit').prop('disabled', !isValid || !name);
+            });
+
+            // Name input validation
+            $('#lead-name').on('input', function() {
+                const name = $(this).val().trim();
+                const email = $('#lead-email').val();
+                const isValidEmail = self.isValidEmail(email);
+                
+                // Update submit button state
+                $('.clarke-btn-submit').prop('disabled', !name || !isValidEmail);
             });
         },
 
@@ -335,7 +358,7 @@
                 if (!expenseValue || expenseValue === '') {
                     return;
                 }
-            } else if (currentStepNum < 15) {
+            } else if (currentStepNum < 14) {
                 const $selectedOption = $currentStep.find('input[type="radio"]:checked');
                 if ($selectedOption.length === 0) {
                     return;
@@ -410,9 +433,16 @@
         submitForm: function() {
             const self = this;
             const email = $('#lead-email').val();
+            const name = $('#lead-name').val().trim();
+
+            if (!name) {
+                alert('Por favor, informe seu nome.');
+                return;
+            }
 
             if (!this.isValidEmail(email)) {
-                alert('Por favor, informe um email válido.');
+                $('#email-error').show();
+                $('#lead-email').addClass('invalid');
                 return;
             }
 
@@ -435,7 +465,7 @@
                         self.results = response.data;
 
                         // Save lead
-                        self.saveLead(email);
+                        self.saveLead(name, email);
                     } else {
                         self.showError(response.data.message || 'Erro ao calcular. Tente novamente.');
                     }
@@ -447,7 +477,7 @@
         },
 
         // Save lead to database
-        saveLead: function(email) {
+        saveLead: function(name, email) {
             const self = this;
 
             $.ajax({
@@ -456,6 +486,7 @@
                 data: {
                     action: 'clarke_save_lead',
                     nonce: clarkeCalc.nonce,
+                    name: name,
                     email: email,
                     answers: this.answers,
                     scores: this.results.scores,
@@ -483,18 +514,89 @@
 
         // Show results
         showResults: function() {
+            const self = this;
             $('#clarke-loading').removeClass('show');
             
             const html = this.buildResultsHTML();
             $('#clarke-results').html(html).addClass('show');
             
+            // Bind analysis form submission
+            $('#btn-request-analysis').on('click', function() {
+                self.requestAnalysis();
+            });
+            
             this.scrollToTop();
+        },
+
+        // Request analysis for ACL strategies
+        requestAnalysis: function() {
+            const self = this;
+            const phone = $('#analysis-phone').val().trim();
+            
+            if (!phone) {
+                alert('Por favor, informe seu telefone para contato.');
+                return;
+            }
+            
+            // Phone validation (Brazilian format)
+            const phoneRegex = /^[\d\s\(\)\-\+]{10,}$/;
+            if (!phoneRegex.test(phone)) {
+                alert('Por favor, informe um telefone válido.');
+                return;
+            }
+            
+            const $btn = $('#btn-request-analysis');
+            const originalText = $btn.html();
+            $btn.html('Enviando...').prop('disabled', true);
+            
+            $.ajax({
+                url: clarkeCalc.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'clarke_request_analysis',
+                    nonce: clarkeCalc.nonce,
+                    phone: phone,
+                    strategy: this.results.winner.key,
+                    email: $('#lead-email').val(),
+                    name: $('#lead-name').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#analysis-form').html(`
+                            <div style="text-align: center; padding: 20px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin-bottom: 12px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <p style="color: white; font-weight: 600; font-size: 16px; margin: 0;">Solicitação enviada com sucesso!</p>
+                                <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 8px 0 0 0;">Entraremos em contato em breve.</p>
+                            </div>
+                        `);
+                    } else {
+                        alert(response.data.message || 'Erro ao enviar solicitação. Tente novamente.');
+                        $btn.html(originalText).prop('disabled', false);
+                    }
+                },
+                error: function() {
+                    alert('Erro de conexão. Tente novamente.');
+                    $btn.html(originalText).prop('disabled', false);
+                }
+            });
         },
 
         // Build results HTML
         buildResultsHTML: function() {
             const winner = this.results.winner;
             const strategies = this.results.all_strategies;
+
+            // Strategy descriptions
+            const strategyDescriptions = {
+                'acl': 'O Mercado Livre de Energia (ACL) permite que sua empresa compre energia diretamente de geradores ou comercializadoras, negociando preços e condições. É ideal para empresas com consumo a partir de 500 kW de demanda contratada.',
+                'solar': 'A energia solar fotovoltaica gera eletricidade através de painéis solares instalados em sua propriedade. Oferece economia de longo prazo e contribui para a sustentabilidade ambiental.',
+                'acl_solar': 'Combina os benefícios do Mercado Livre de Energia com a geração solar própria. Essa estratégia híbrida maximiza a economia e oferece maior segurança energética.',
+                'biomassa': 'Utiliza resíduos orgânicos (como bagaço de cana, madeira ou dejetos) para gerar energia. É uma solução sustentável especialmente vantajosa para empresas do agronegócio ou indústrias com acesso a biomassa.',
+                'chp': 'A Cogeração a Gás (CHP) produz energia elétrica e térmica simultaneamente a partir de gás natural. Ideal para operações que necessitam de calor industrial, como hospitais e indústrias.',
+                'biomassa_acl': 'Integra a geração própria com biomassa à compra de energia no Mercado Livre. Oferece flexibilidade e aproveita recursos orgânicos disponíveis na empresa.',
+                'gd_compartilhada': 'A Geração Distribuída Compartilhada permite receber créditos de energia gerada em usinas remotas (principalmente solares). Não requer investimento em infraestrutura própria.',
+                'eficiencia': 'Foca na otimização do consumo através de equipamentos mais eficientes, automação e gestão inteligente de energia. É o primeiro passo para qualquer estratégia de economia.'
+            };
 
             let starsHTML = '';
             for (let i = 1; i <= 5; i++) {
@@ -514,11 +616,13 @@
                 </li>`;
             });
 
+            // Get winner description
+            const winnerDescription = strategyDescriptions[winner.key] || '';
+
+            // Build table rows for ALL strategies
             let tableRows = '';
-            let count = 0;
             for (const key in strategies) {
                 const strategy = strategies[key];
-                if (count >= 4) break; // Show only top 4
                 
                 const winnerClass = strategy.is_winner ? 'winner' : '';
                 const disqualifiedClass = strategy.is_disqualified ? 'disqualified' : '';
@@ -536,24 +640,31 @@
                 const monthlyText = strategy.is_disqualified ? '-' : `R$ ${this.formatNumber(strategy.economy.monthly_min)} - R$ ${this.formatNumber(strategy.economy.monthly_max)}`;
                 const paybackText = strategy.is_disqualified ? '-' : strategy.payback;
 
-                tableRows += `<tr class="${winnerClass} ${disqualifiedClass}">
+                // Add description tooltip
+                const description = strategyDescriptions[key] || '';
+                const descriptionAttr = description ? `data-description="${description.replace(/"/g, '&quot;')}"` : '';
+
+                tableRows += `<tr class="${winnerClass} ${disqualifiedClass}" ${descriptionAttr}>
                     <td>
                         <div class="strategy-name">
                             ${strategy.name}
                             ${winnerBadge}
                         </div>
+                        <div class="strategy-description-mini">${description ? description.substring(0, 100) + '...' : ''}</div>
                     </td>
                     <td>${economyText}</td>
                     <td>${monthlyText}</td>
                     <td>${paybackText}</td>
                     <td><div class="clarke-mini-stars">${miniStars}</div></td>
                 </tr>`;
-                count++;
             }
 
             // Add baseline (Mercado Cativo)
-            tableRows += `<tr class="disqualified">
-                <td>Mercado Cativo (atual)</td>
+            tableRows += `<tr class="disqualified baseline">
+                <td>
+                    <div class="strategy-name">Mercado Cativo (atual)</div>
+                    <div class="strategy-description-mini">Permanecer comprando energia da distribuidora local no modelo regulado tradicional.</div>
+                </td>
                 <td>0%</td>
                 <td>R$ 0</td>
                 <td>-</td>
@@ -564,12 +675,63 @@
                 </div></td>
             </tr>`;
 
+            // Check if winner is ACL-related (show analysis form)
+            const aclStrategies = ['acl', 'acl_solar', 'biomassa_acl'];
+            const showAnalysisForm = aclStrategies.includes(winner.key);
+            
+            let ctaSection = '';
+            if (showAnalysisForm) {
+                ctaSection = `
+                <div class="clarke-analysis-cta">
+                    <h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                        Solicite uma Análise Detalhada
+                    </h3>
+                    <p>A estratégia <strong>${winner.name}</strong> requer uma análise técnica do seu perfil de consumo. Nossa equipe especializada pode avaliar sua elegibilidade e apresentar uma proposta personalizada com os valores exatos de economia.</p>
+                    <div class="clarke-analysis-form" id="analysis-form">
+                        <div class="clarke-analysis-form-row">
+                            <input type="text" class="clarke-input" id="analysis-phone" placeholder="Telefone para contato" />
+                            <button type="button" class="clarke-btn clarke-btn-analysis" id="btn-request-analysis">
+                                Solicitar Análise Gratuita
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="clarke-analysis-note">Um especialista entrará em contato em até 24 horas úteis.</p>
+                    </div>
+                </div>`;
+            } else {
+                ctaSection = `
+                <div class="clarke-next-steps">
+                    <h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        Próximos Passos
+                    </h3>
+                    <p>Com base no seu perfil, identificamos que a estratégia <strong>${winner.name}</strong> é a mais adequada para sua empresa. Para avançar, nossa equipe pode fazer uma análise técnica detalhada e apresentar uma proposta personalizada.</p>
+                    <a href="#" class="clarke-cta-btn">
+                        Falar com um especialista
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                    </a>
+                </div>`;
+            }
+
             return `
                 <div class="clarke-results-header">
                     <span class="clarke-badge">Estratégia Recomendada</span>
                     <h2>Sua melhor opção é</h2>
                     <div class="clarke-strategy-name">${winner.name}</div>
                     <div class="clarke-stars">${starsHTML}</div>
+                </div>
+
+                <div class="clarke-strategy-description">
+                    <p>${winnerDescription}</p>
                 </div>
 
                 <div class="clarke-economy-section">
@@ -631,7 +793,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
-                        Comparativo de Estratégias
+                        Comparativo de Todas as Estratégias
                     </h3>
                     <div class="clarke-table-wrapper">
                         <table class="clarke-table">
@@ -651,21 +813,7 @@
                     </div>
                 </div>
 
-                <div class="clarke-next-steps">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
-                        Próximos Passos
-                    </h3>
-                    <p>Com base no seu perfil, identificamos que a estratégia <strong>${winner.name}</strong> é a mais adequada para sua empresa. Para avançar, nossa equipe pode fazer uma análise técnica detalhada e apresentar uma proposta personalizada.</p>
-                    <a href="#" class="clarke-cta-btn">
-                        Falar com um especialista
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                        </svg>
-                    </a>
-                </div>
+                ${ctaSection}
 
                 <div class="clarke-disclaimer">
                     <strong>Importante:</strong> Os valores apresentados são estimativas baseadas nas informações fornecidas e médias de mercado. Os resultados reais podem variar de acordo com fatores específicos do seu caso. Recomendamos um estudo técnico detalhado para uma análise precisa.
@@ -684,10 +832,38 @@
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         },
 
-        // Validate email
+        // Validate email with comprehensive regex
         isValidEmail: function(email) {
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return regex.test(email);
+            if (!email) return false;
+            
+            // More comprehensive email regex
+            const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+            
+            if (!regex.test(email)) return false;
+            
+            // Check for common invalid patterns
+            const invalidPatterns = [
+                /test@test/i,
+                /fake@/i,
+                /asdf@/i,
+                /abc@abc/i,
+                /@test\.com$/i,
+                /@example\.com$/i,
+                /@localhost/i,
+                /^a+@/i,
+                /^\d+@\d+\./
+            ];
+            
+            for (const pattern of invalidPatterns) {
+                if (pattern.test(email)) return false;
+            }
+            
+            // Check minimum length for domain
+            const parts = email.split('@');
+            if (parts.length !== 2) return false;
+            if (parts[0].length < 1 || parts[1].length < 4) return false;
+            
+            return true;
         },
 
         // Show error
