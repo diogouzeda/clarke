@@ -586,7 +586,7 @@
             const winner = this.results.winner;
             const strategies = this.results.all_strategies;
 
-            // Strategy descriptions
+            // Strategy descriptions - full version for winner section
             const strategyDescriptions = {
                 'acl': 'O Mercado Livre de Energia (ACL) permite que sua empresa compre energia diretamente de geradores ou comercializadoras, negociando preços e condições. É ideal para empresas com consumo a partir de 500 kW de demanda contratada.',
                 'solar': 'A energia solar fotovoltaica gera eletricidade através de painéis solares instalados em sua propriedade. Oferece economia de longo prazo e contribui para a sustentabilidade ambiental.',
@@ -596,6 +596,18 @@
                 'biomassa_acl': 'Integra a geração própria com biomassa à compra de energia no Mercado Livre. Oferece flexibilidade e aproveita recursos orgânicos disponíveis na empresa.',
                 'gd_compartilhada': 'A Geração Distribuída Compartilhada permite receber créditos de energia gerada em usinas remotas (principalmente solares). Não requer investimento em infraestrutura própria.',
                 'eficiencia': 'Foca na otimização do consumo através de equipamentos mais eficientes, automação e gestão inteligente de energia. É o primeiro passo para qualquer estratégia de economia.'
+            };
+
+            // Short descriptions for table - compact and complete
+            const strategyDescriptionsShort = {
+                'acl': 'Compra de energia no Mercado Livre com preços negociados.',
+                'solar': 'Geração própria com painéis solares fotovoltaicos.',
+                'acl_solar': 'Mercado Livre + geração solar própria.',
+                'biomassa': 'Geração de energia a partir de resíduos orgânicos.',
+                'chp': 'Cogeração de energia elétrica e térmica a gás.',
+                'biomassa_acl': 'Geração com biomassa + Mercado Livre.',
+                'gd_compartilhada': 'Créditos de energia de usinas remotas.',
+                'eficiencia': 'Otimização do consumo e equipamentos eficientes.'
             };
 
             let starsHTML = '';
@@ -640,17 +652,16 @@
                 const monthlyText = strategy.is_disqualified ? '-' : `R$ ${this.formatNumber(strategy.economy.monthly_min)} - R$ ${this.formatNumber(strategy.economy.monthly_max)}`;
                 const paybackText = strategy.is_disqualified ? '-' : strategy.payback;
 
-                // Add description tooltip
-                const description = strategyDescriptions[key] || '';
-                const descriptionAttr = description ? `data-description="${description.replace(/"/g, '&quot;')}"` : '';
+                // Use short description for table
+                const shortDescription = strategyDescriptionsShort[key] || '';
 
-                tableRows += `<tr class="${winnerClass} ${disqualifiedClass}" ${descriptionAttr}>
+                tableRows += `<tr class="${winnerClass} ${disqualifiedClass}">
                     <td>
                         <div class="strategy-name">
                             ${strategy.name}
                             ${winnerBadge}
                         </div>
-                        <div class="strategy-description-mini">${description ? description.substring(0, 100) + '...' : ''}</div>
+                        <div class="strategy-description-mini">${shortDescription}</div>
                     </td>
                     <td>${economyText}</td>
                     <td>${monthlyText}</td>
@@ -663,7 +674,7 @@
             tableRows += `<tr class="disqualified baseline">
                 <td>
                     <div class="strategy-name">Mercado Cativo (atual)</div>
-                    <div class="strategy-description-mini">Permanecer comprando energia da distribuidora local no modelo regulado tradicional.</div>
+                    <div class="strategy-description-mini">Modelo regulado tradicional da distribuidora local.</div>
                 </td>
                 <td>0%</td>
                 <td>R$ 0</td>

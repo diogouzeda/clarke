@@ -1167,17 +1167,8 @@
 .strategy-description-mini {
     font-size: 12px !important;
     color: var(--clarke-gray-dark) !important;
-    line-height: 1.5 !important;
-    margin-top: 6px !important;
-    display: none !important;
-}
-
-.clarke-table tr:hover .strategy-description-mini {
-    display: block !important;
-}
-
-.clarke-table tr.winner .strategy-description-mini {
-    display: block !important;
+    line-height: 1.4 !important;
+    margin-top: 4px !important;
 }
 
 /* Analysis CTA Section */
