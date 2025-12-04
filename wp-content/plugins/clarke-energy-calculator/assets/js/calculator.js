@@ -520,15 +520,54 @@
             const html = this.buildResultsHTML();
             $('#clarke-results').html(html).addClass('show');
             
-            // Bind analysis form submission
-            $('#btn-request-analysis').on('click', function() {
-                self.requestAnalysis();
+            // Bind modal open/close for HubSpot form
+            $('#btn-open-analysis-modal').on('click', function() {
+                self.openHubSpotModal();
+            });
+            
+            $('#btn-close-modal, #hubspot-modal-overlay').on('click', function(e) {
+                if (e.target === this) {
+                    self.closeHubSpotModal();
+                }
+            });
+            
+            // Close modal on ESC key
+            $(document).on('keydown.modal', function(e) {
+                if (e.key === 'Escape') {
+                    self.closeHubSpotModal();
+                }
             });
             
             this.scrollToTop();
         },
 
-        // Request analysis for ACL strategies
+        // Open HubSpot form modal
+        openHubSpotModal: function() {
+            const $modal = $('#hubspot-modal-overlay');
+            $modal.addClass('show');
+            $('body').css('overflow', 'hidden');
+            
+            // Load HubSpot script if not already loaded
+            if (!window.hsFormsLoaded) {
+                const script = document.createElement('script');
+                script.src = 'https://js.hsforms.net/forms/embed/developer/21312607.js';
+                script.defer = true;
+                script.onload = function() {
+                    window.hsFormsLoaded = true;
+                };
+                document.head.appendChild(script);
+            }
+        },
+
+        // Close HubSpot form modal
+        closeHubSpotModal: function() {
+            const $modal = $('#hubspot-modal-overlay');
+            $modal.removeClass('show');
+            $('body').css('overflow', '');
+            $(document).off('keydown.modal');
+        },
+
+        // Request analysis for ACL strategies (legacy - keeping for backwards compatibility)
         requestAnalysis: function() {
             const self = this;
             const phone = $('#analysis-phone').val().trim();
@@ -698,20 +737,34 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                         </svg>
-                        Solicite uma Análise Detalhada
+                        Solicite uma Análise Gratuita
                     </h3>
                     <p>A estratégia <strong>${winner.name}</strong> requer uma análise técnica do seu perfil de consumo. Nossa equipe especializada pode avaliar sua elegibilidade e apresentar uma proposta personalizada com os valores exatos de economia.</p>
-                    <div class="clarke-analysis-form" id="analysis-form">
-                        <div class="clarke-analysis-form-row">
-                            <input type="text" class="clarke-input" id="analysis-phone" placeholder="Telefone para contato" />
-                            <button type="button" class="clarke-btn clarke-btn-analysis" id="btn-request-analysis">
-                                Solicitar Análise Gratuita
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </button>
+                    <button type="button" class="clarke-btn clarke-btn-analysis" id="btn-open-analysis-modal">
+                        Solicitar Análise Gratuita
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </button>
+                    <p class="clarke-analysis-note">Preencha o formulário e um especialista entrará em contato.</p>
+                </div>
+
+                <!-- HubSpot Form Modal -->
+                <div class="clarke-modal-overlay" id="hubspot-modal-overlay">
+                    <div class="clarke-modal">
+                        <button type="button" class="clarke-modal-close" id="btn-close-modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        <div class="clarke-modal-header">
+                            <h3>Solicite sua Análise Gratuita</h3>
+                            <p>Preencha o formulário abaixo e nossa equipe entrará em contato</p>
                         </div>
-                        <p class="clarke-analysis-note">Um especialista entrará em contato em até 24 horas úteis.</p>
+                        <div class="clarke-modal-body" id="hubspot-form-container">
+                            <div class="hs-form-html" data-region="na1" data-form-id="84a85fe9-3e0e-4eee-8220-ad81ff9293bc" data-portal-id="21312607"></div>
+                        </div>
                     </div>
                 </div>`;
             } else {
